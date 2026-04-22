@@ -58,139 +58,191 @@ CREATE EXTENSION IF NOT EXISTS "wrappers" WITH SCHEMA "extensions";
 
 
 
-CREATE TYPE "public"."blog_status" AS ENUM (
-    'draft',
-    'published',
-    'archived'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."blog_status" AS ENUM (
+        'draft',
+        'published',
+        'archived'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."blog_status" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."department_enum" AS ENUM (
-    'reproductive_health',
-    'gynecology',
-    'urology',
-    'transgender_care',
-    'sexual_health'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."department_enum" AS ENUM (
+        'reproductive_health',
+        'gynecology',
+        'urology',
+        'transgender_care',
+        'sexual_health'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."department_enum" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."gender_enum" AS ENUM (
-    'male',
-    'female',
-    'other'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."gender_enum" AS ENUM (
+        'male',
+        'female',
+        'other'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."gender_enum" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."notification_type_enum" AS ENUM (
-    'appointment_reminder',
-    'new_appointment',
-    'appointment_update',
-    'general'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."notification_type_enum" AS ENUM (
+        'appointment_reminder',
+        'new_appointment',
+        'appointment_update',
+        'general'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."notification_type_enum" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."patient_status" AS ENUM (
-    'active',
-    'inactive',
-    'archived'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."patient_status" AS ENUM (
+        'active',
+        'inactive',
+        'archived'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."patient_status" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."process_status" AS ENUM (
-    'pending',
-    'in_progress',
-    'completed',
-    'cancelled'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."process_status" AS ENUM (
+        'pending',
+        'in_progress',
+        'completed',
+        'cancelled'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."process_status" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."receipt_status" AS ENUM (
-    'pending',
-    'paid',
-    'failed'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."receipt_status" AS ENUM (
+        'pending',
+        'paid',
+        'failed'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."receipt_status" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."record_status" AS ENUM (
-    'draft',
-    'active',
-    'archived'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."record_status" AS ENUM (
+        'draft',
+        'active',
+        'archived'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."record_status" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."report_status" AS ENUM (
-    'pending',
-    'reviewed',
-    'resolved'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."report_status" AS ENUM (
+        'pending',
+        'reviewed',
+        'resolved'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."report_status" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."schedule_enum" AS ENUM (
-    'Morning',
-    'Afternoon',
-    'Evening'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."schedule_enum" AS ENUM (
+        'Morning',
+        'Afternoon',
+        'Evening'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."schedule_enum" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."speciality_enum" AS ENUM (
-    'gynecologist',
-    'urologist',
-    'endocrinologist',
-    'reproductive_specialist',
-    'sexual_health_specialist'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."speciality_enum" AS ENUM (
+        'gynecologist',
+        'urologist',
+        'endocrinologist',
+        'reproductive_specialist',
+        'sexual_health_specialist'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."speciality_enum" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."staff_role_enum" AS ENUM (
-    'doctor',
-    'consultant',
-    'receptionist',
-    'administrator'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."staff_role_enum" AS ENUM (
+        'doctor',
+        'consultant',
+        'receptionist',
+        'administrator'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."staff_role_enum" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."staff_status" AS ENUM (
-    'active',
-    'inactive',
-    'on_leave',
-    'terminated'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."staff_status" AS ENUM (
+        'active',
+        'inactive',
+        'on_leave',
+        'terminated'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."staff_status" OWNER TO "postgres";
