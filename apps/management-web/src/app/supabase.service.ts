@@ -1599,7 +1599,7 @@ export class SupabaseService {
         this.logger.info(`  ${key}: ${value}`);
       }
 
-      const edgeFunctionUrl = 'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/create-staff';
+      const edgeFunctionUrl = 'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/create-staff';
       this.logger.info('🔗 Edge function URL:', edgeFunctionUrl);
 
       // Make HTTP POST request with FormData (No Authorization header)
@@ -1659,7 +1659,7 @@ export class SupabaseService {
         this.logger.info(`  ${key}: ${value}`);
       }
 
-      const edgeFunctionUrl = 'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/create-staff';
+      const edgeFunctionUrl = 'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/create-staff';
       this.logger.info('🔗 Test URL:', edgeFunctionUrl);
 
       const response = await fetch(edgeFunctionUrl, {
@@ -2512,7 +2512,7 @@ export class SupabaseService {
       : imagePath;
 
     // Construct the full Supabase storage URL
-    const supabaseUrl = 'https://xzxxodxplyetecrsbxmc.supabase.co';
+    const supabaseUrl = 'https://ldmcdielxskywugyohrq.supabase.co';
     return `${supabaseUrl}/storage/v1/object/public/${bucket}/${cleanPath}`;
   }
 

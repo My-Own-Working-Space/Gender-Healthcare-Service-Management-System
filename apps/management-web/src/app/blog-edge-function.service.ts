@@ -19,7 +19,7 @@ export interface BlogPost {
   providedIn: 'root'
 })
 export class BlogEdgeFunctionService {
-  private readonly EDGE_FUNCTION_URL = 'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/create-blog-post';
+  private readonly EDGE_FUNCTION_URL = 'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/create-blog-post';
   private readonly BUCKET_NAME = 'blog-uploads';
 
   constructor() { }
@@ -275,7 +275,7 @@ export class BlogEdgeFunctionService {
     }
 
     // Construct URL for blog-uploads bucket
-    const baseUrl = 'https://xzxxodxplyetecrsbxmc.supabase.co/storage/v1/object/public';
+    const baseUrl = 'https://ldmcdielxskywugyohrq.supabase.co/storage/v1/object/public';
     return `${baseUrl}/${this.BUCKET_NAME}/${imagePath}`;
   }
 

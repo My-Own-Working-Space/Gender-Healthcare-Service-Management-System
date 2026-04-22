@@ -20,7 +20,7 @@ export interface Staff {
   providedIn: 'root'
 })
 export class EdgeFunctionService {
-  private readonly EDGE_FUNCTION_URL = 'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/create-staff';
+  private readonly EDGE_FUNCTION_URL = 'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/create-staff';
 
   constructor() { }
 

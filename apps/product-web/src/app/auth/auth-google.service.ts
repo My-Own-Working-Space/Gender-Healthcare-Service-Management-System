@@ -17,7 +17,7 @@ export class AuthGoogleService {
   error = signal<string | null>(null);
 
   private readonly SUPABASE_FUNCTIONS_URL =
-    'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1';
+    'https://ldmcdielxskywugyohrq.supabase.co/functions/v1';
 
   constructor() {
     this.initConfiguration();

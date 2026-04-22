@@ -21,18 +21,25 @@ export class BlogService {
   }
 
   getBlogs(): Observable<Blog[]> {
-    return this.http.get<Blog[]>(`${environment.apiEndpoint}/fetch-blog`, {
-      headers: this.getHeaders(),
+    return this.http.post<Blog[]>(`${environment.supabaseUrl}/rest/v1/rpc/fetch_blogs`, {}, {
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': environment.supabaseKey,
+        'Authorization': `Bearer ${environment.supabaseKey}`
+      },
     });
   }
 
   getBlogById(blogId: string): Observable<BlogDetail> {
-    const params = new HttpParams().set('blog_id', blogId);
-    return this.http.get<BlogDetail>(
-      `${environment.apiEndpoint}/fetch-blog-id`,
+    return this.http.post<BlogDetail>(
+      `${environment.supabaseUrl}/rest/v1/rpc/fetch_blog_id`,
+      { p_blog_id: blogId },
       {
-        params,
-        headers: this.getHeaders(),
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': environment.supabaseKey,
+          'Authorization': `Bearer ${environment.supabaseKey}`
+        },
       }
     );
   }

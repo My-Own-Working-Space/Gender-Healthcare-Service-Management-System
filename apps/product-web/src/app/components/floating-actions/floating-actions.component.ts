@@ -182,7 +182,7 @@ export class FloatingActionsComponent implements AfterViewChecked, OnDestroy {
       // Convert doctor images to HTML img tags
       .replace(
         /\[(\/([\w\-\.]+\.webp))\]/g,
-        '<div class="doctor-image-container"><img src="https://xzxxodxplyetecrsbxmc.supabase.co/storage/v1/object/public/staff-uploads$1" alt="Doctor Photo" class="doctor-image" /></div>'
+        '<div class="doctor-image-container"><img src="https://ldmcdielxskywugyohrq.supabase.co/storage/v1/object/public/staff-uploads$1" alt="Doctor Photo" class="doctor-image" /></div>'
       )
       // Convert doctor profile links to clickable HTML links (handles various ID formats)
       .replace(

@@ -257,7 +257,7 @@ export class ReceptionistStaffManagementComponent implements OnInit {
         return staff.image_link;
       }
       // If it's a path, construct the full Supabase storage URL
-      const supabaseUrl = 'https://xzxxodxplyetecrsbxmc.supabase.co';
+      const supabaseUrl = 'https://ldmcdielxskywugyohrq.supabase.co';
       return `${supabaseUrl}/storage/v1/object/public/staff-uploads/${staff.image_link}`;
     }
     return null;

@@ -140,7 +140,7 @@ serve(async (req) => {
         blog_id: blog.blog_id,
         title: blog.blog_title,
         excerpt: blog.excerpt,
-        image_link: blogImage ?? 'https://xzxxodxplyetecrsbxmc.supabase.co/storage/v1/object/public/blog-uploads//blog_bg.webp',
+        image_link: blogImage ?? 'https://ldmcdielxskywugyohrq.supabase.co/storage/v1/object/public/blog-uploads//blog_bg.webp',
         created_at: blog.created_at,
         updated_at: blog.updated_at,
         doctor_id: blog.doctor_id

@@ -17,9 +17,9 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 })
 export class VnpayService {
   private readonly vnpayPaymentUrl =
-    'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/vnpay-payment';
+    'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/vnpay-payment';
   private readonly vnpayCallbackUrl =
-    'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/vnpay-callback';
+    'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/vnpay-callback';
   private readonly vnp_TmnCode = '4Q0AGO8S';
 
   private supabase: SupabaseClient;

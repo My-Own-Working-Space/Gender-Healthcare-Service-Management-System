@@ -45,9 +45,9 @@ export interface EmailForgotPasswordErrorResponse {
 })
 export class EmailForgotPasswordService {
   private readonly REQUEST_PASSWORD_RESET_URL =
-    'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/request-password-reset';
+    'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/request-password-reset';
   private readonly CONFIRM_PASSWORD_RESET_URL =
-    'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/confirm-password-reset';
+    'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/confirm-password-reset';
 
   constructor(private http: HttpClient) {}
 

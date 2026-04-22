@@ -1074,7 +1074,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       // Call the update-patient edge function
       const response = await this.http
         .post<any>(
-          'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/update-patient',
+          'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/update-patient',
           formData,
           { headers }
         )
@@ -1317,7 +1317,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   getFullImageUrl(imageLink: string | null | undefined): string {
     if (!imageLink) {
-      return 'https://xzxxodxplyetecrsbxmc.supabase.co/storage/v1/object/public/patient-uploads//default.jpg';
+      return 'https://ldmcdielxskywugyohrq.supabase.co/storage/v1/object/public/patient-uploads//default.jpg';
     }
 
     // If the image link already starts with http/https, return as is

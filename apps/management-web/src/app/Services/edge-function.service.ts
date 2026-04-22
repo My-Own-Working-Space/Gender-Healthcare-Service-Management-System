@@ -85,7 +85,7 @@ export interface FetchDoctorParams {
     providedIn: 'root'
 })
 export class EdgeFunctionService {
-    private readonly BASE_URL = 'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1';
+    private readonly BASE_URL = 'https://ldmcdielxskywugyohrq.supabase.co/functions/v1';
 
     constructor() { }
 

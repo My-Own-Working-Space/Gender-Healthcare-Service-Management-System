@@ -42,8 +42,8 @@ export interface ForgotPasswordErrorResponse {
   providedIn: 'root'
 })
 export class ForgotPasswordService {
-  private readonly FORGOT_PASSWORD_API_URL = 'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/forgot-password-request';
-  private readonly RESET_PASSWORD_API_URL = 'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/reset-password';
+  private readonly FORGOT_PASSWORD_API_URL = 'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/forgot-password-request';
+  private readonly RESET_PASSWORD_API_URL = 'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/reset-password';
 
   constructor(private http: HttpClient) {}
 

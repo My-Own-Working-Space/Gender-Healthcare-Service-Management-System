@@ -70,10 +70,16 @@ export class DoctorService {
 
   // =========== FETCH DOCTOR BY ID ===========
   getDoctorById(id: string): Observable<DoctorDetail> {
-    const params = new HttpParams().set('doctor_id', id);
-    return this.http.get<DoctorDetail>(
-      `${environment.apiEndpoint}/fetch-doctor-id`,
-      { params }
+    return this.http.post<DoctorDetail>(
+      `${environment.supabaseUrl}/rest/v1/rpc/fetch_doctor_id`,
+      { p_doctor_id: id, p_email: '' }, // Updated RPC fallback for empty email
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': environment.supabaseKey,
+          'Authorization': `Bearer ${environment.supabaseKey}`
+        },
+      }
     );
   }
 
@@ -82,10 +88,8 @@ export class DoctorService {
    * Lấy danh sách bác sĩ theo service_id
    */
   getDoctorsByService(service_id: string): Observable<DoctorBooking[]> {
-    return this.http.post<DoctorBooking[]>(
-      `${environment.apiEndpoint}/fetch-doctor`,
-      { service_id },
-      { headers: this.getHeaders() }
+    return this.fetchDoctorBooking().pipe(
+      map(doctors => doctors.filter(d => d.services && d.services.includes(service_id)))
     );
   }
 }

@@ -30,10 +30,15 @@ export class MedicalService {
    * Gọi API lấy danh sách dịch vụ y tế
    */
   getServices(): Observable<MedicalServiceModel[]> {
-    return this.http.get<MedicalServiceModel[]>(
-      `${environment.apiEndpoint}/fetch-service`,
+    return this.http.post<MedicalServiceModel[]>(
+      `${environment.supabaseUrl}/rest/v1/rpc/fetch_service`,
+      {},
       {
-        headers: this.getHeaders(),
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': environment.supabaseKey,
+          'Authorization': `Bearer ${environment.supabaseKey}`
+        },
       }
     );
   }
@@ -90,12 +95,15 @@ export class MedicalService {
    * Gọi API lấy dịch vụ theo ID
    */
   getServiceById(serviceId: string): Observable<ServiceDetail> {
-    const params = new HttpParams().set('service_id', serviceId);
-    return this.http.get<ServiceDetail>(
-      `${environment.apiEndpoint}/fetch-service-id`,
+    return this.http.post<ServiceDetail>(
+      `${environment.supabaseUrl}/rest/v1/rpc/fetch_service_id`,
+      { p_service_id: serviceId },
       {
-        params,
-        headers: this.getHeaders(),
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': environment.supabaseKey,
+          'Authorization': `Bearer ${environment.supabaseKey}`
+        },
       }
     );
   }
@@ -105,12 +113,7 @@ export class MedicalService {
    * Lấy danh sách dịch vụ cho booking (old endpoint)
    */
   fetchService(): Observable<ServiceBooking[]> {
-    return this.http.get<ServiceBooking[]>(
-      `${environment.apiEndpoint}/fetch-service`,
-      {
-        headers: this.getHeaders(),
-      }
-    );
+    return this.fetchServiceBooking();
   }
 
   // =========== FETCH SERVICES FOR BOOKING (NEW ENDPOINT) ===========

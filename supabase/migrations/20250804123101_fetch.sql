@@ -323,7 +323,7 @@ begin
       'id', s.staff_id,
       'fullname', s.full_name,
       'gender', s.gender,
-      'img', 'https://xzxxodxplyetecrsbxmc.supabase.co/storage/v1/object/public/blog-uploads/' || s.image_link
+      'img', 'https://ldmcdielxskywugyohrq.supabase.co/storage/v1/object/public/blog-uploads/' || s.image_link
     )
   )
   into result

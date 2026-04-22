@@ -58,9 +58,9 @@ export interface OTPErrorResponse {
 })
 export class OtpService {
   private readonly REGISTER_API_URL =
-    'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/register';
+    'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/register';
   private readonly VERIFY_OTP_API_URL =
-    'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/verify-otp';
+    'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/verify-otp';
 
   constructor(private http: HttpClient) {}
 

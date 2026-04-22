@@ -205,7 +205,7 @@ export class AppointmentService {
     console.log('CALLING EDGE FUNCTION FOR APPOINTMENT CREATION...');
 
     // Call edge function
-    const edgeFunctionUrl = 'https://xzxxodxplyetecrsbxmc.supabase.co/functions/v1/create-appointment';
+    const edgeFunctionUrl = 'https://ldmcdielxskywugyohrq.supabase.co/functions/v1/create-appointment';
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
