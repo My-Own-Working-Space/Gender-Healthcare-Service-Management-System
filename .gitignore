@@ -116,8 +116,8 @@ dist
 .pnp.*
 
 # Ignore Angular environments
-# /apps/management-web/src/app/environments/environment.ts
-# /apps/product-web/src/app/environments/environment.ts
+/apps/management-web/src/app/environments/environment.ts
+/apps/product-web/src/app/environments/environment.ts
 
 # Ignore Supabase .env
 /product-gdhc/supabase/functions/.env
@@ -128,3 +128,6 @@ dist/
 *.tgz
 *.tar.gz
 .fake
+# Angular cache
+.angular/
+apps/*/.angular/

@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, HostListener, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { SupabaseService } from '../../supabase.service';
+import { FormatNamePipe } from '../../utils/name.util';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-doctor-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormatNamePipe],
   templateUrl: './doctor-header.component.html',
   styleUrls: ['./doctor-header.component.css']
 })
@@ -101,7 +103,7 @@ export class DoctorHeaderComponent implements OnInit {
     const cleanPath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
 
     // Construct the full Supabase storage URL
-    const supabaseUrl = 'https://xzxxodxplyetecrsbxmc.supabase.co';
+    const supabaseUrl = environment.supabaseUrl;
     return `${supabaseUrl}/storage/v1/object/public/${bucket}/${cleanPath}`;
   }
 
