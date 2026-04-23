@@ -72,6 +72,14 @@
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "overrides": {
+    "@angular/animations": "^19.2.21",
+    "@angular/common": "^19.2.21",
+    "@angular/compiler": "^19.2.21",
+    "@angular/core": "^19.2.21",
+    "@angular/forms": "^19.2.21",
+    "@angular/platform-browser": "^19.2.21",
+    "@angular/platform-browser-dynamic": "^19.2.21",
+    "@angular/router": "^19.2.21",
     "@supabase/supabase-js": {
       "@supabase/gotrue-js": "2.61.0"
     }
