@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  supabaseUrl: 'https://your-project.supabase.co',
-  supabaseKey: 'your-anon-key',
-  apiEndpoint: 'https://your-project.supabase.co/functions/v1',
-  mockEndpoint: 'https://your-mock-id.mock.pstmn.io',
-  authorization: 'your-anon-key',
+  supabaseUrl: "https://ldmcdielxskywugyohrq.supabase.co",
+  supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkbWNkaWVseHNreXd1Z3lvaHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDIxNjQsImV4cCI6MjA5MjQxODE2NH0.tnvnv2UXN2vxNWBVVIwMMhNNeRTlSKbAcl5Fvi9KezI",
+  apiEndpoint: "https://ldmcdielxskywugyohrq.supabase.co/functions/v1",
+  mockEndpoint: "https://9f62615a-9b44-48f5-937b-9f62e8417c80.mock.pstmn.io",
+  authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkbWNkaWVseHNreXd1Z3lvaHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDIxNjQsImV4cCI6MjA5MjQxODE2NH0.tnvnv2UXN2vxNWBVVIwMMhNNeRTlSKbAcl5Fvi9KezI",
 };
