@@ -1090,6 +1090,8 @@ $$;
 ALTER FUNCTION "public"."delete_staff_by_id"("staff_id_input" "uuid") OWNER TO "postgres";
 
 
+DROP FUNCTION IF EXISTS "public"."fetch_blog_id"("input_blog_id" "uuid");
+DROP FUNCTION IF EXISTS "public"."fetch_blog_id"("p_blog_id" "uuid");
 CREATE OR REPLACE FUNCTION "public"."fetch_blog_id"("input_blog_id" "uuid") RETURNS "jsonb"
     LANGUAGE "plpgsql"
     AS $$
