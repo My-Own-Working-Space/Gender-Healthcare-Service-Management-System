@@ -8,6 +8,7 @@ import { BlogDetail } from '../../models/blog.model';
 import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-blog-detail',
@@ -88,6 +89,26 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
         .filter(Boolean);
     }
     return [];
+  }
+
+  getImageUrl(link?: string | null): string {
+    if (!link) return '/assets/default-doctor.png';
+    // If it's already a full URL, return it
+    if (link.startsWith('http')) return link;
+    
+    const parts = link.split('/');
+    const filename = parts[parts.length - 1];
+    return `${environment.supabaseStorageUrl}staff-uploads/${filename}`;
+  }
+
+  getBlogImageUrl(link?: string | null): string {
+    if (!link) return '';
+    // If it's already a full URL, return it
+    if (link.startsWith('http')) return link;
+
+    const parts = link.split('/');
+    const filename = parts[parts.length - 1];
+    return `${environment.supabaseStorageUrl}blog-uploads/${filename}`;
   }
 
   backToList() {

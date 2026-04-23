@@ -8,6 +8,7 @@ import { BlogService } from '../../services/blog.service';
 import { Blog, BlogDisplay } from '../../models/blog.model';
 import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
 import { BreadcrumbService } from '../../services/breadcrumb.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-blogs-page',
@@ -96,12 +97,22 @@ export class BlogsPageComponent implements OnInit {
       id: blog.blog_id,
       title: blog.blog_title,
       desc: blog.excerpt,
-      img: blog.image_link || '', // fallback image
+      img: this.getBlogImageUrl(blog.image_link),
       author: blog.doctor_details.full_name,
       createdAt: blog.created_at,
       tags: tagsArray,
       category: this.getCategoryFromTags(tagsArray), // Logic để xác định category
     };
+  }
+
+  getBlogImageUrl(link?: string | null): string {
+    if (!link) return 'https://via.placeholder.com/600x350?text=No+Image';
+    // If it's already a full URL, return it
+    if (link.startsWith('http')) return link;
+
+    const parts = link.split('/');
+    const filename = parts[parts.length - 1];
+    return `${environment.supabaseStorageUrl}blog-uploads/${filename}`;
   }
 
   private extractTags(blogTags: any): string[] {

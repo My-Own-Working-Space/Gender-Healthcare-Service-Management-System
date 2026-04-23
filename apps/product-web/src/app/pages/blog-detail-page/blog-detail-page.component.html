@@ -80,9 +80,7 @@
         >
           <div class="flex items-center gap-3">
             <img
-              [src]="
-                blog.doctor_details.image_link || '/assets/default-doctor.png'
-              "
+              [src]="getImageUrl(blog.doctor_details.image_link)"
               alt="Author photo"
               class="w-12 h-12 rounded-full object-cover border-2 border-[#98d2c0] bg-white shadow-sm"
               loading="lazy"
@@ -145,7 +143,7 @@
         >
           @if (blog.image_link) {
           <img
-            [src]="blog.image_link"
+            [src]="getBlogImageUrl(blog.image_link)"
             alt="Blog banner"
             class="w-full h-full object-cover rounded-[16px] transition-all duration-300 group-hover:blur-[2px] group-hover:brightness-90"
             loading="lazy"
