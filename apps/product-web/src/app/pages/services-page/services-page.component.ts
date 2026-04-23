@@ -31,10 +31,11 @@ export class ServicePageComponent implements OnInit {
   private cartService = inject(CartService);
   private translate = inject(TranslateService);
 
-  categories = signal<string[]>([]);
+  readonly ALL_CATEGORY = '__ALL__';
+  categories = signal<{id: string, label: string}[]>([]);
   services = signal<MedicalService[]>([]);
   searchValue = signal('');
-  selectedCategory = signal('');
+  selectedCategory = signal(this.ALL_CATEGORY);
   page = signal(1);
   pageSize = 6;
   loading = signal(true);
@@ -43,41 +44,52 @@ export class ServicePageComponent implements OnInit {
   ngOnInit() {
     this.loading.set(true);
 
-    // Use stream to handle translation changes and initial load
-    this.translate.get('SERVICES.ALL_CATEGORIES').subscribe((allText: string) => {
-      this.selectedCategory.set(allText);
+    // Initial load
+    this.refreshCategories();
 
-      this.medicalService.getServices().subscribe({
-        next: (data: MedicalService[]) => {
-          this.services.set(data || []);
-          const categoryNames = (data || [])
-            .map((s: MedicalService) => s.service_categories?.category_name)
-            .filter((name): name is string => Boolean(name));
-          const uniqueCats = Array.from(new Set(categoryNames));
-          this.categories.set([allText, ...uniqueCats]);
-          this.loading.set(false);
-        },
-        error: (error) => {
-          // Fallback to mock data
-          this.medicalService.getMockServices().subscribe({
-            next: (mockData: MedicalService[]) => {
-              this.services.set(mockData || []);
-              const categoryNames = (mockData || [])
-                .map((s: MedicalService) => s.service_categories?.category_name)
-                .filter((name): name is string => Boolean(name));
-              const uniqueCats = Array.from(new Set(categoryNames));
-              this.categories.set([allText, ...uniqueCats]);
-              this.loading.set(false);
-            },
-            error: () => {
-              this.services.set([]);
-              this.categories.set([allText]);
-              this.loading.set(false);
-            }
-          });
-        }
-      });
+    // Listen for language changes to refresh category labels
+    this.translate.onLangChange.subscribe(() => {
+      this.refreshCategories();
     });
+
+    this.medicalService.getServices().subscribe({
+      next: (data: MedicalService[]) => {
+        this.services.set(data || []);
+        this.refreshCategories();
+        this.loading.set(false);
+      },
+      error: (error) => {
+        // Fallback to mock data
+        this.medicalService.getMockServices().subscribe({
+          next: (mockData: MedicalService[]) => {
+            this.services.set(mockData || []);
+            this.refreshCategories();
+            this.loading.set(false);
+          },
+          error: () => {
+            this.services.set([]);
+            this.refreshCategories();
+            this.loading.set(false);
+          }
+        });
+      }
+    });
+  }
+
+  private refreshCategories() {
+    const data = this.services();
+    const allText = this.translate.instant('SERVICES.ALL_CATEGORIES');
+    
+    const categoryNames = Array.from(new Set(
+      data.map(s => s.service_categories?.category_name).filter(Boolean)
+    )) as string[];
+
+    const cats = [
+      { id: this.ALL_CATEGORY, label: allText },
+      ...categoryNames.map(name => ({ id: name, label: name }))
+    ];
+    
+    this.categories.set(cats);
   }
 
   limitText(text: string | null, maxLength: number = 32): string {
@@ -94,8 +106,8 @@ export class ServicePageComponent implements OnInit {
 
   get filteredServices(): MedicalService[] {
     let filtered = this.services();
-    const allText = this.translate.instant('SERVICES.ALL_CATEGORIES');
-    if (this.selectedCategory() !== allText) {
+    
+    if (this.selectedCategory() !== this.ALL_CATEGORY) {
       filtered = filtered.filter(
         (s) => s.service_categories?.category_name === this.selectedCategory()
       );

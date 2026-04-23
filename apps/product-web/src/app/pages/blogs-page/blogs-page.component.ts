@@ -36,8 +36,9 @@ export class BlogsPageComponent implements OnInit {
   // Đây là mảng gom tất cả tag không trùng (tag cloud, filter...)
   allTags: string[] = [];
 
-  categories: string[] = [];
-  selectedCategory: string = '';
+  readonly ALL_CATEGORY = '__ALL__';
+  categories: {id: string, label: string}[] = [];
+  selectedCategory: string = this.ALL_CATEGORY;
   searchValue: string = '';
 
   // Pagination
@@ -51,19 +52,34 @@ export class BlogsPageComponent implements OnInit {
   selectedTag: string | null = null;
 
   ngOnInit() {
-    // Use stream to handle translation changes and initial load
-    this.translate.get(['COMMON.ALL', 'BLOG.CATEGORIES.COMMUNITY', 'BLOG.CATEGORIES.MENTAL_HEALTH', 'BLOG.CATEGORIES.GENDER_STORIES', 'BLOG.CATEGORIES.LEGAL', 'BLOG.CATEGORIES.EDUCATION']).subscribe((translations) => {
-      const allText = translations['COMMON.ALL'];
+    // Initial load
+    this.refreshCategories();
+
+    // Listen for language changes to refresh category labels
+    this.translate.onLangChange.subscribe(() => {
+      this.refreshCategories();
+    });
+
+    this.loadBlogs();
+  }
+
+  private refreshCategories() {
+    this.translate.get([
+      'COMMON.ALL', 
+      'BLOG.CATEGORIES.COMMUNITY', 
+      'BLOG.CATEGORIES.MENTAL_HEALTH', 
+      'BLOG.CATEGORIES.GENDER_STORIES', 
+      'BLOG.CATEGORIES.LEGAL', 
+      'BLOG.CATEGORIES.EDUCATION'
+    ]).subscribe((translations) => {
       this.categories = [
-        allText,
-        translations['BLOG.CATEGORIES.COMMUNITY'],
-        translations['BLOG.CATEGORIES.MENTAL_HEALTH'],
-        translations['BLOG.CATEGORIES.GENDER_STORIES'],
-        translations['BLOG.CATEGORIES.LEGAL'],
-        translations['BLOG.CATEGORIES.EDUCATION'],
+        { id: this.ALL_CATEGORY, label: translations['COMMON.ALL'] },
+        { id: 'Community', label: translations['BLOG.CATEGORIES.COMMUNITY'] },
+        { id: 'Mental Health', label: translations['BLOG.CATEGORIES.MENTAL_HEALTH'] },
+        { id: 'Gender Stories', label: translations['BLOG.CATEGORIES.GENDER_STORIES'] },
+        { id: 'Legal', label: translations['BLOG.CATEGORIES.LEGAL'] },
+        { id: 'Education', label: translations['BLOG.CATEGORIES.EDUCATION'] },
       ];
-      this.selectedCategory = allText;
-      this.loadBlogs();
     });
   }
 
@@ -163,15 +179,14 @@ export class BlogsPageComponent implements OnInit {
 
   filterByTag(tag: string) {
     this.selectedTag = tag;
-    this.selectedCategory = this.translate.instant('COMMON.ALL');
+    this.selectedCategory = this.ALL_CATEGORY;
     this.page = 1;
   }
 
   get filteredBlogs(): BlogDisplay[] {
     let result = this.allBlogs;
 
-    const allText = this.translate.instant('COMMON.ALL');
-    if (this.selectedCategory !== allText) {
+    if (this.selectedCategory !== this.ALL_CATEGORY) {
       result = result.filter((b) => b.category === this.selectedCategory);
     }
     if (this.selectedTag) {
