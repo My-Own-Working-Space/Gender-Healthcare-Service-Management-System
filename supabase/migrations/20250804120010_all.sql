@@ -248,32 +248,44 @@ END $$;
 ALTER TYPE "public"."staff_status" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."ticket_schedule_enum" AS ENUM (
-    'Anytime',
-    'Office hours (8:00 AM - 17:00 PM)',
-    'Outside office hours (17:00 PM - 22:00 PM)'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."ticket_schedule_enum" AS ENUM (
+        'Anytime',
+        'Office hours (8:00 AM - 17:00 PM)',
+        'Outside office hours (17:00 PM - 22:00 PM)'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."ticket_schedule_enum" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."vaccination_status_enum" AS ENUM (
-    'not_vaccinated',
-    'partially_vaccinated',
-    'fully_vaccinated'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."vaccination_status_enum" AS ENUM (
+        'not_vaccinated',
+        'partially_vaccinated',
+        'fully_vaccinated'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."vaccination_status_enum" OWNER TO "postgres";
 
 
-CREATE TYPE "public"."visit_type_enum" AS ENUM (
-    'consultation',
-    'follow-up',
-    'emergency',
-    'routine'
-);
+DO $$ BEGIN
+    CREATE TYPE "public"."visit_type_enum" AS ENUM (
+        'consultation',
+        'follow-up',
+        'emergency',
+        'routine'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 
 ALTER TYPE "public"."visit_type_enum" OWNER TO "postgres";
