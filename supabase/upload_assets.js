@@ -3,117 +3,110 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ldmcdielxskywugyohrq.supabase.co';
+const SUPABASE_URL = process.env.SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!SERVICE_ROLE_KEY) {
-  console.error('Missing SUPABASE_SERVICE_ROLE_KEY in environment variables');
+  console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
   process.exit(1);
 }
 
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+const assetsDir = path.join(__dirname, '../apps/product-web/doctor-assets');
 
-const doctorImages = [
-  path.join(__dirname, '../apps/product-web/doctor-assets/doctor_1.png'),
-  path.join(__dirname, '../apps/product-web/doctor-assets/doctor_2.png'),
-  path.join(__dirname, '../apps/product-web/doctor-assets/doctor_3.png')
-];
+async function uploadAll() {
+  console.log('🚀 Starting robust asset upload...');
 
-const serviceImage = '/home/minhchau/.gemini/antigravity/brain/e9038e8a-f6f2-4982-ab55-21ad305e9e86/service_bg_1776852507537.png';
-
-async function setupStorage() {
-  console.log('🚀 Starting asset upload and linking...');
-
-  // 1. Create buckets if they don't exist
+  // 1. Ensure buckets
   const buckets = ['staff-uploads', 'service-uploads'];
   for (const b of buckets) {
-    const { data: bucket, error } = await supabase.storage.getBucket(b);
-    if (error && error.message.includes('not found')) {
-      console.log(`Creating bucket: ${b}`);
+    try {
       await supabase.storage.createBucket(b, { public: true });
-    } else {
-      console.log(`Bucket ${b} already exists`);
+    } catch (e) {
+      // Ignore bucket already exists
     }
   }
 
-  // 2. Upload Doctor Images
-  const docUrls = [];
-  for (let i = 0; i < doctorImages.length; i++) {
-    const filePath = doctorImages[i];
-    const fileName = `doctor_${i + 1}.jpg`;
-    const fileContent = fs.readFileSync(filePath);
+  // 2. Upload all files in doctor-assets
+  const files = fs.readdirSync(assetsDir);
+  console.log(`Found ${files.length} files in doctor-assets`);
 
-    console.log(`Uploading ${fileName}...`);
-    const { data, error } = await supabase.storage.from('staff-uploads').upload(fileName, fileContent, {
-      contentType: 'image/jpeg',
+  for (const file of files) {
+    const filePath = path.join(assetsDir, file);
+    const fileContent = fs.readFileSync(filePath);
+    const contentType = file.endsWith('.png') ? 'image/png' : 'image/jpeg';
+
+    console.log(`Uploading ${file}...`);
+    await supabase.storage.from('staff-uploads').upload(file, fileContent, {
+      contentType,
       upsert: true
     });
-
-    if (error) {
-      console.error(`Error uploading ${fileName}:`, error.message);
-    } else {
-      docUrls.push(fileName);
-    }
   }
 
-  // 3. Upload Service Image
-  const serviceFileName = 'service_bg.png';
-  const serviceFileContent = fs.readFileSync(serviceImage);
-  console.log('Uploading service background...');
-  const { error: sError } = await supabase.storage.from('service-uploads').upload(serviceFileName, serviceFileContent, {
-    contentType: 'image/png',
-    upsert: true
-  });
-  if (sError) console.error('Error uploading service bg:', sError.message);
+  // 3. Special: Service image
+  const serviceImage = '/home/minhchau/.gemini/antigravity/brain/e9038e8a-f6f2-4982-ab55-21ad305e9e86/service_bg_1776852507537.png';
+  if (fs.existsSync(serviceImage)) {
+    console.log('Uploading service background...');
+    const content = fs.readFileSync(serviceImage);
+    await supabase.storage.from('service-uploads').upload('service_bg.png', content, {
+      contentType: 'image/png',
+      upsert: true
+    });
+  }
 
-  // 4. Update Database
-  console.log('Linking assets in database...');
-
-  // Get first 3 doctors
-  const { data: doctors, error: dError } = await supabase
-    .from('staff_members')
-    .select('staff_id')
-    .eq('role', 'doctor')
-    .limit(3);
-
-  if (dError) {
-    console.error('Error fetching doctors:', dError.message);
-  } else {
-    for (let i = 0; i < doctors.length; i++) {
-      if (docUrls[i]) {
-        await supabase
-          .from('staff_members')
-          .update({ image_link: docUrls[i] })
-          .eq('staff_id', doctors[i].staff_id);
-        console.log(`Linked doctor ${doctors[i].staff_id} to ${docUrls[i]}`);
+  // 4. Update Database to match filenames (doctor_N.png)
+  console.log('Syncing database image links...');
+  
+  const updateQuery = `
+    UPDATE staff_members 
+    SET image_link = regexp_replace(image_link, '/?doctor([0-9]+)\\..*', 'doctor_\\1.png')
+    WHERE image_link LIKE '%doctor%';
+  `;
+  
+  let sqlError = null;
+  try {
+    const { error } = await supabase.rpc('execute_sql', { query: updateQuery });
+    sqlError = error;
+  } catch (e) {
+    sqlError = e;
+  }
+  
+  if (sqlError) {
+    console.warn('SQL sync via RPC failed, trying direct update...');
+    // Fallback: Fetch all and update
+    const { data: staff } = await supabase.from('staff_members').select('staff_id, image_link');
+    if (staff) {
+      for (const s of staff) {
+        if (s.image_link && s.image_link.includes('doctor')) {
+          const match = s.image_link.match(/doctor(\d+)/);
+          if (match) {
+            const newLink = `doctor_${match[1]}.png`;
+            await supabase.from('staff_members').update({ image_link: newLink }).eq('staff_id', s.staff_id);
+          }
+        }
       }
     }
   }
 
-  // Update services
-  const { data: services, error: svError } = await supabase
-    .from('medical_services')
-    .select('service_id')
-    .limit(5);
-
-  if (svError) {
-    console.error('Error fetching services:', svError.message);
-  } else {
-    for (const sv of services) {
-      await supabase
-        .from('medical_services')
-        .update({ image_link: '/service-bg.png' }) // Using a generic path prefix logic if needed
-        .eq('service_id', sv.service_id);
-      // Wait, the app might expect a full path or just the name depending on how getFullImageUrl is implemented.
-      // I saw in DoctorHeaderComponent: return `${supabaseUrl}/storage/v1/object/public/${bucket}/${cleanPath}`;
-    }
-    // Correcting the service image link to match bucket expectation
-    await supabase.rpc('execute_sql', {
-      query: `UPDATE medical_services SET image_link = 'service_bg.png' WHERE image_link IS NULL OR image_link = ''`
+  // Ensure services use the correct link
+  try {
+    const { error: sSqlError } = await supabase.rpc('execute_sql', {
+      query: "UPDATE medical_services SET image_link = 'service_bg.png' WHERE image_link IS NULL OR image_link = '' OR image_link LIKE '%service%'"
     });
+    if (sSqlError) throw sSqlError;
+  } catch (e) {
+    console.warn('SQL sync for services via RPC failed, trying direct update...');
+    const { data: services } = await supabase.from('medical_services').select('service_id, image_link');
+    if (services) {
+      for (const sv of services) {
+        if (!sv.image_link || sv.image_link === '' || sv.image_link.includes('service')) {
+          await supabase.from('medical_services').update({ image_link: 'service_bg.png' }).eq('service_id', sv.service_id);
+        }
+      }
+    }
   }
 
-  console.log('✅ Done!');
+  console.log('✅ Asset sync complete!');
 }
 
-setupStorage();
+uploadAll();
