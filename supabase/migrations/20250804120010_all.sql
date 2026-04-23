@@ -308,7 +308,7 @@ $$;
 ALTER FUNCTION "public"."assign_doctors_to_slots"("start_date" "date", "end_date" "date") OWNER TO "postgres";
 
 
-CREATE PROCEDURE "public"."auto_insert_slots_for_next_month"()
+CREATE OR REPLACE PROCEDURE "public"."auto_insert_slots_for_next_month"()
     LANGUAGE "plpgsql"
     AS $$
 DECLARE
