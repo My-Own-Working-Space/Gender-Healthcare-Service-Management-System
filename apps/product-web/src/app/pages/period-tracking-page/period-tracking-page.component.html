@@ -14,16 +14,16 @@
     <!-- Text Content -->
     <div class="space-y-6">
       <div class="inline-block px-4 py-1.5 bg-coffee-100 text-coffee-700 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4">
-        Feature Ongoing Maintenance
+        {{ 'MAINTENANCE.PERIOD.BADGE' | translate }}
       </div>
       
       <h1 class="text-5xl md:text-6xl font-black text-gray-800 tracking-tighter leading-tight">
-        Tính năng đang được <br>
-        <span class="text-coffee-600 italic">nâng cấp & cải thiện</span>
+        {{ 'MAINTENANCE.PERIOD.TITLE' | translate }} <br>
+        <span class="text-coffee-600 italic">{{ 'MAINTENANCE.PERIOD.TITLE_HIGHLIGHT' | translate }}</span>
       </h1>
       
       <p class="text-gray-500 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
-        Chúng tôi đang tinh chỉnh hệ thống theo dõi sức khỏe để mang lại trải nghiệm chính xác và cá nhân hóa hơn. Cảm ơn sự kiên nhẫn và đồng hành của bạn trong hành trình chăm sóc sức khỏe này.
+        {{ 'MAINTENANCE.PERIOD.DESCRIPTION' | translate }}
       </p>
 
       <!-- Progress Bar (Fake) -->
@@ -32,8 +32,8 @@
           <div class="h-full bg-gradient-to-r from-coffee-400 to-coffee-700 w-[75%] animate-pulse"></div>
         </div>
         <div class="flex justify-between mt-3 px-1">
-          <span class="text-[10px] font-black text-gray-400 uppercase">Tiến độ cập nhật</span>
-          <span class="text-[10px] font-black text-coffee-600 uppercase">75% Complete</span>
+          <span class="text-[10px] font-black text-gray-400 uppercase">{{ 'MAINTENANCE.PERIOD.PROGRESS_LABEL' | translate }}</span>
+          <span class="text-[10px] font-black text-coffee-600 uppercase">{{ 'MAINTENANCE.PERIOD.PROGRESS_VALUE' | translate }}</span>
         </div>
       </div>
 
@@ -43,7 +43,7 @@
           routerLink="/"
           class="px-10 py-5 bg-coffee-800 text-white rounded-3xl font-black text-sm uppercase tracking-widest shadow-xl shadow-coffee-100 hover:bg-coffee-950 transition-all active:scale-95"
         >
-          Quay lại Trang chủ
+          {{ 'MAINTENANCE.PERIOD.BACK_HOME' | translate }}
         </button>
       </div>
     </div>

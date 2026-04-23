@@ -544,5 +544,16 @@
     "MALE": "Nam",
     "FEMALE": "Nữ",
     "OTHER": "Khác"
+  },
+  "MAINTENANCE": {
+    "PERIOD": {
+      "BADGE": "TÍNH NĂNG ĐANG NÂNG CẤP",
+      "TITLE": "Tính năng đang được",
+      "TITLE_HIGHLIGHT": "nâng cấp & cải thiện",
+      "DESCRIPTION": "Chúng tôi đang tinh chỉnh hệ thống theo dõi sức khỏe để mang lại trải nghiệm chính xác và cá nhân hóa hơn. Cảm ơn sự kiên nhẫn và đồng hành của bạn trong hành trình chăm sóc sức khỏe này.",
+      "PROGRESS_LABEL": "Tiến độ cập nhật",
+      "PROGRESS_VALUE": "Hoàn thành 75%",
+      "BACK_HOME": "Quay lại Trang chủ"
+    }
   }
 }

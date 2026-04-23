@@ -544,5 +544,16 @@
     "MALE": "Male",
     "FEMALE": "Female",
     "OTHER": "Other"
+  },
+  "MAINTENANCE": {
+    "PERIOD": {
+      "BADGE": "FEATURE ONGOING MAINTENANCE",
+      "TITLE": "Feature currently being",
+      "TITLE_HIGHLIGHT": "upgraded & improved",
+      "DESCRIPTION": "We are fine-tuning our health tracking system to provide a more accurate and personalized experience. Thank you for your patience and companionship in this healthcare journey.",
+      "PROGRESS_LABEL": "Update Progress",
+      "PROGRESS_VALUE": "75% Complete",
+      "BACK_HOME": "Back to Home"
+    }
   }
 }
