@@ -1090,9 +1090,7 @@ $$;
 ALTER FUNCTION "public"."delete_staff_by_id"("staff_id_input" "uuid") OWNER TO "postgres";
 
 
-DROP FUNCTION IF EXISTS "public"."fetch_blog_id"("input_blog_id" "uuid");
-DROP FUNCTION IF EXISTS "public"."fetch_blog_id"("p_blog_id" "uuid");
-CREATE OR REPLACE FUNCTION "public"."fetch_blog_id"("input_blog_id" "uuid") RETURNS "jsonb"
+CREATE OR REPLACE FUNCTION "public"."fetch_blog_id"("p_blog_id" "uuid") RETURNS "jsonb"
     LANGUAGE "plpgsql"
     AS $$
 declare
@@ -1101,7 +1099,7 @@ begin
   -- Tăng view count
   update blog_posts
   set view_count = coalesce(view_count, 0) + 1
-  where blog_id = input_blog_id;
+  where blog_id = p_blog_id;
 
   -- Lấy thông tin blog + bác sĩ
   select jsonb_build_object(
@@ -1124,7 +1122,7 @@ begin
   into result
   from blog_posts b
   left join staff_members s on b.doctor_id = s.staff_id
-  where b.blog_id = input_blog_id;
+  where b.blog_id = p_blog_id;
 
   if result is null then
     raise exception 'Blog not found';
@@ -3637,9 +3635,10 @@ GRANT ALL ON FUNCTION "public"."delete_staff_by_id"("staff_id_input" "uuid") TO 
 
 
 
-GRANT ALL ON FUNCTION "public"."fetch_blog_id"("input_blog_id" "uuid") TO "anon";
-GRANT ALL ON FUNCTION "public"."fetch_blog_id"("input_blog_id" "uuid") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."fetch_blog_id"("input_blog_id" "uuid") TO "service_role";
+ALTER FUNCTION "public"."fetch_blog_id"("p_blog_id" "uuid") OWNER TO "postgres";
+GRANT ALL ON FUNCTION "public"."fetch_blog_id"("p_blog_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."fetch_blog_id"("p_blog_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."fetch_blog_id"("p_blog_id" "uuid") TO "service_role";
 
 
 
