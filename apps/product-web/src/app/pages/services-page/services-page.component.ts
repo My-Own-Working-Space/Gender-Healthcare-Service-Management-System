@@ -43,39 +43,40 @@ export class ServicePageComponent implements OnInit {
   ngOnInit() {
     this.loading.set(true);
 
-    // Initialize with translated "All" category
-    const allText = this.translate.instant('SERVICES.ALL_CATEGORIES');
-    this.selectedCategory.set(allText);
+    // Use stream to handle translation changes and initial load
+    this.translate.get('SERVICES.ALL_CATEGORIES').subscribe((allText: string) => {
+      this.selectedCategory.set(allText);
 
-    this.medicalService.getServices().subscribe({
-      next: (data: MedicalService[]) => {
-        this.services.set(data || []);
-        const categoryNames = (data || [])
-          .map((s: MedicalService) => s.service_categories?.category_name)
-          .filter((name): name is string => Boolean(name));
-        const uniqueCats = Array.from(new Set(categoryNames));
-        this.categories.set([allText, ...uniqueCats]);
-        this.loading.set(false);
-      },
-      error: (error) => {
-        // Fallback to mock data
-        this.medicalService.getMockServices().subscribe({
-          next: (mockData: MedicalService[]) => {
-            this.services.set(mockData || []);
-            const categoryNames = (mockData || [])
-              .map((s: MedicalService) => s.service_categories?.category_name)
-              .filter((name): name is string => Boolean(name));
-            const uniqueCats = Array.from(new Set(categoryNames));
-            this.categories.set([allText, ...uniqueCats]);
-            this.loading.set(false);
-          },
-          error: () => {
-            this.services.set([]);
-            this.categories.set([allText]);
-            this.loading.set(false);
-          }
-        });
-      },
+      this.medicalService.getServices().subscribe({
+        next: (data: MedicalService[]) => {
+          this.services.set(data || []);
+          const categoryNames = (data || [])
+            .map((s: MedicalService) => s.service_categories?.category_name)
+            .filter((name): name is string => Boolean(name));
+          const uniqueCats = Array.from(new Set(categoryNames));
+          this.categories.set([allText, ...uniqueCats]);
+          this.loading.set(false);
+        },
+        error: (error) => {
+          // Fallback to mock data
+          this.medicalService.getMockServices().subscribe({
+            next: (mockData: MedicalService[]) => {
+              this.services.set(mockData || []);
+              const categoryNames = (mockData || [])
+                .map((s: MedicalService) => s.service_categories?.category_name)
+                .filter((name): name is string => Boolean(name));
+              const uniqueCats = Array.from(new Set(categoryNames));
+              this.categories.set([allText, ...uniqueCats]);
+              this.loading.set(false);
+            },
+            error: () => {
+              this.services.set([]);
+              this.categories.set([allText]);
+              this.loading.set(false);
+            }
+          });
+        }
+      });
     });
   }
 
