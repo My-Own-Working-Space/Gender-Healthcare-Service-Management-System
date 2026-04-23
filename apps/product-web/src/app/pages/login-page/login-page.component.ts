@@ -108,28 +108,11 @@ export class LoginComponent {
     this.formSubmitted = true;
     this.errorMsg = '';
 
-    console.log('🚀 LOGIN COMPONENT - Form submission started');
-    console.log('📋 Form valid:', formData.valid);
-    console.log('📋 Form errors:', formData.errors);
-    console.log('📋 Full form value:', formData.form.value);
-
     if (formData.valid) {
       // --- Lấy giá trị từ form ---
       const phone: UserLogin['phone'] = formData.form.value.phone;
       const password: UserLogin['password'] = formData.form.value.password;
       const rememberMe = formData.form.value.rememberMe;
-
-      console.log('📱 Phone from form:', phone);
-      console.log('🔒 Password from form (length):', password.length);
-      console.log(
-        '🔒 Password from form (first 2 chars):',
-        password.substring(0, 2) + '***'
-      );
-      console.log('💾 Remember me:', rememberMe);
-      console.log('📊 Form data type check:');
-      console.log('  - phone type:', typeof phone);
-      console.log('  - password type:', typeof password);
-      console.log('  - rememberMe type:', typeof rememberMe);
 
       // --- Gọi API login ---
       console.log('🔄 Calling authService.loginWithPhone...');
@@ -218,14 +201,7 @@ export class LoginComponent {
             }
           },
           error: (err: any) => {
-            console.log('❌ LOGIN COMPONENT - Error response received');
-            console.log('📦 Full error object:', err);
-            console.log('📦 Error status:', err.status);
-            console.log('📦 Error statusText:', err.statusText);
-            console.log('📦 Error message:', err.message);
-            console.log('📦 Error body:', err.error);
-            console.log('📦 Error headers:', err.headers);
-            console.log('📦 Error url:', err.url);
+            // Sensitive error logs removed
 
             // --- Xử lý lỗi ---
             if (err.status === 401) {

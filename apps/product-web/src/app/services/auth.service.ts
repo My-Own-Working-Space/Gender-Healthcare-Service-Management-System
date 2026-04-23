@@ -226,9 +226,7 @@ export class AuthService {
         const parts = token.split('.');
         if (parts.length === 3) {
           const payload = JSON.parse(atob(parts[1]));
-          console.log('Token payload:', payload);
-          console.log('Token expires:', new Date(payload.exp * 1000));
-          console.log('Token is expired:', payload.exp * 1000 < Date.now());
+          // Token payload log removed for security
         }
       } catch (e) {
         console.log('Token is not a valid JWT:', e);
@@ -286,7 +284,7 @@ export class AuthService {
 
       if (currentUserStr) {
         const currentUser = JSON.parse(currentUserStr);
-        console.log('✅ Found user in localStorage:', currentUser.email);
+        // Sensitive logs removed
 
         // Create AuthUser from localStorage data
         const authUser: AuthUser = {
@@ -448,17 +446,14 @@ export class AuthService {
 
     const body: UserLogin = {
       phone: formattedPhone,
-      password,
+      password: password,
     };
 
     const headers = this.getHeaders();
     const endpoint = `${environment.apiEndpoint}/login`;
 
+    // Sensitive login payload log removed
     console.log('🌐 Login endpoint:', endpoint);
-    console.log('📦 Request body:', JSON.stringify(body, null, 2));
-    console.log('📋 Request headers:', headers);
-    console.log('🔒 Password length:', password.length);
-    console.log('🔒 Password starts with:', password.substring(0, 2) + '***');
 
     return this.http.post(endpoint, body, { headers }).pipe(
       tap({

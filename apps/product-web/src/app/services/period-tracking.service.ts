@@ -118,7 +118,9 @@ export class PeriodTrackingService {
 
     // Create additional entropy
     const timestamp = Date.now().toString(16);
-    const random = Math.random().toString(16).substring(2, 10);
+    const randomValues = new Uint32Array(2);
+    crypto.getRandomValues(randomValues);
+    const random = Array.from(randomValues).map(v => v.toString(16).padStart(8, '0')).join('').substring(0, 8);
 
     // Combine to create 32 hex characters
     const combined = (hex + timestamp + random + '00000000000000000000000000000000').substring(0, 32);
@@ -156,8 +158,12 @@ export class PeriodTrackingService {
     }
 
     // Fallback: manual UUID v4 generation
+    const array = new Uint32Array(4);
+    crypto.getRandomValues(array);
+    let i = 0;
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      const r = Math.random() * 16 | 0;
+      const r = (array[i >> 3] >> ((i & 7) << 2)) & 15;
+      i++;
       const v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
@@ -175,11 +181,7 @@ export class PeriodTrackingService {
           currentUser.id ||
           currentUser.patient_id;
 
-        console.log('Getting current user ID from localStorage:', {
-          currentUser,
-          userId,
-          source: 'localStorage',
-        });
+        // Sensitive log removed for security
 
         if (userId) {
           return userId;
@@ -203,11 +205,10 @@ export class PeriodTrackingService {
       // Final fallback: generate a session-based user ID
       let sessionUserId = sessionStorage.getItem('session_user_id');
       if (!sessionUserId) {
-        sessionUserId = `user_${Date.now()}_${Math.random()
-          .toString(36)
-          .substring(2, 11)}`;
+        const randomValues = new Uint32Array(1);
+        crypto.getRandomValues(randomValues);
+        sessionUserId = `user_${Date.now()}_${randomValues[0].toString(36)}`;
         sessionStorage.setItem('session_user_id', sessionUserId);
-        console.log('Generated new session user ID:', sessionUserId);
       }
 
       console.log('Using session user ID:', sessionUserId);

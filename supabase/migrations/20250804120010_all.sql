@@ -1136,6 +1136,7 @@ $$;
 ALTER FUNCTION "public"."fetch_blog_id"("input_blog_id" "uuid") OWNER TO "postgres";
 
 
+DROP FUNCTION IF EXISTS "public"."fetch_doctor_id"("p_doctor_id" "uuid", "p_email" "text") CASCADE;
 CREATE OR REPLACE FUNCTION "public"."fetch_doctor_id"("p_doctor_id" "uuid", "p_email" "text") RETURNS "jsonb"
     LANGUAGE "plpgsql"
     AS $$

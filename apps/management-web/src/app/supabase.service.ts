@@ -4705,12 +4705,17 @@ export class SupabaseService {
       }
 
       // Create doctor slot assignments
-      const assignments = (createdSlots || []).map(slot => ({
-        slot_id: slot.slot_id,
-        doctor_id: doctorId,
-        appointments_count: Math.floor(Math.random() * 3), // Random appointments 0-2
-        max_appointments: 2
-      }));
+      const assignments = (createdSlots || []).map(slot => {
+        const randomArray = new Uint32Array(1);
+        crypto.getRandomValues(randomArray);
+        const randomCount = randomArray[0] % 3; // Random 0-2
+        return {
+          slot_id: slot.slot_id,
+          doctor_id: doctorId,
+          appointments_count: randomCount,
+          max_appointments: 2
+        };
+      });
 
       const { error: assignmentError } = await supabase
         .from('doctor_slot_assignments')

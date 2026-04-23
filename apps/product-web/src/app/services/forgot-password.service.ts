@@ -77,8 +77,7 @@ export class ForgotPasswordService {
    * Request password reset OTP
    */
   requestPasswordReset(phone: string): Observable<ForgotPasswordResponse> {
-    console.log('📱 FORGOT PASSWORD SERVICE - REQUEST PASSWORD RESET STARTED');
-    console.log('📱 Original phone input:', phone);
+    // Sensitive PII log removed
     
     // Convert Vietnamese phone format to E.164 format
     const e164Phone = this.convertToE164(phone);
@@ -93,18 +92,14 @@ export class ForgotPasswordService {
     });
 
     console.log('🌐 Forgot password endpoint:', this.FORGOT_PASSWORD_API_URL);
-    console.log('📦 Request body:', JSON.stringify(payload, null, 2));
-    console.log('📋 Request headers:', headers);
+    // Sensitive payload log removed
 
     return this.http
       .post<ForgotPasswordResponse>(this.FORGOT_PASSWORD_API_URL, payload, { headers })
       .pipe(
         tap({
           next: (response) => {
-            console.log('✅ FORGOT PASSWORD REQUEST SUCCESS - Response received:', response);
-            console.log('📱 Phone confirmed:', response.data?.phone);
-            console.log('📝 Message:', response.message);
-            console.log('✅ Success status:', response.success);
+            console.log('✅ FORGOT PASSWORD REQUEST SUCCESS');
           },
           error: (error) => {
             console.log('❌ FORGOT PASSWORD REQUEST ERROR - Error details:');
@@ -122,11 +117,7 @@ export class ForgotPasswordService {
    * Reset password with OTP verification
    */
   resetPassword(phone: string, otp: string, newPassword: string): Observable<ResetPasswordResponse> {
-    console.log('🔐 FORGOT PASSWORD SERVICE - RESET PASSWORD STARTED');
-    console.log('📱 Original phone input:', phone);
-    console.log('🔢 OTP code:', otp);
-    console.log('🔒 New password length:', newPassword.length);
-    console.log('🔒 New password starts with:', newPassword.substring(0, 2) + '***');
+    // Sensitive reset input log removed
     
     // Convert Vietnamese phone format to E.164 format
     const e164Phone = this.convertToE164(phone);
@@ -143,22 +134,14 @@ export class ForgotPasswordService {
     });
 
     console.log('🌐 Reset password endpoint:', this.RESET_PASSWORD_API_URL);
-    console.log('📦 Reset password request body:', JSON.stringify({
-      phone: payload.phone,
-      otp_code: payload.otp_code,
-      new_password: '***' + payload.new_password.substring(payload.new_password.length - 2)
-    }, null, 2));
-    console.log('📋 Reset password request headers:', headers);
+    // Sensitive reset payload log removed
 
     return this.http
       .post<ResetPasswordResponse>(this.RESET_PASSWORD_API_URL, payload, { headers })
       .pipe(
         tap({
           next: (response) => {
-            console.log('✅ RESET PASSWORD SUCCESS - Response received:', response);
-            console.log('📱 Phone confirmed:', response.data?.phone);
-            console.log('📝 Message:', response.message);
-            console.log('✅ Success status:', response.success);
+            console.log('✅ RESET PASSWORD SUCCESS');
           },
           error: (error) => {
             console.log('❌ RESET PASSWORD ERROR - Error details:');
