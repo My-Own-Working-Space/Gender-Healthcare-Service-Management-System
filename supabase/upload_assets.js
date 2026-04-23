@@ -7,7 +7,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ldmcdielxskywugyohrq.s
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!SERVICE_ROLE_KEY) {
-  console.error('❌ Missing SUPABASE_SERVICE_ROLE_KEY in environment variables');
+  console.error('Missing SUPABASE_SERVICE_ROLE_KEY in environment variables');
   process.exit(1);
 }
 
@@ -42,7 +42,7 @@ async function setupStorage() {
     const filePath = doctorImages[i];
     const fileName = `doctor_${i + 1}.jpg`;
     const fileContent = fs.readFileSync(filePath);
-    
+
     console.log(`Uploading ${fileName}...`);
     const { data, error } = await supabase.storage.from('staff-uploads').upload(fileName, fileContent, {
       contentType: 'image/jpeg',
@@ -104,8 +104,8 @@ async function setupStorage() {
         .from('medical_services')
         .update({ image_link: '/service-bg.png' }) // Using a generic path prefix logic if needed
         .eq('service_id', sv.service_id);
-        // Wait, the app might expect a full path or just the name depending on how getFullImageUrl is implemented.
-        // I saw in DoctorHeaderComponent: return `${supabaseUrl}/storage/v1/object/public/${bucket}/${cleanPath}`;
+      // Wait, the app might expect a full path or just the name depending on how getFullImageUrl is implemented.
+      // I saw in DoctorHeaderComponent: return `${supabaseUrl}/storage/v1/object/public/${bucket}/${cleanPath}`;
     }
     // Correcting the service image link to match bucket expectation
     await supabase.rpc('execute_sql', {

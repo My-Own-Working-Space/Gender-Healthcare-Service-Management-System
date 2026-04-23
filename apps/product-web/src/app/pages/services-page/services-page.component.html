@@ -67,7 +67,7 @@
         >
           @if (sv.image_link) {
           <img
-            [src]="sv.image_link"
+            [src]="getServiceImageUrl(sv.image_link)"
             class="w-full h-36 object-cover rounded-lg mb-4"
             alt="{{ sv.name }}"
           />

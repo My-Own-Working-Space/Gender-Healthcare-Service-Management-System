@@ -10,6 +10,7 @@ import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-service-page',
@@ -180,5 +181,15 @@ export class ServicePageComponent implements OnInit {
   getCartQuantity(serviceId: string): number {
     const cartItem = this.cartService.getCartItem(serviceId);
     return cartItem ? cartItem.quantity : 0;
+  }
+
+  getServiceImageUrl(link?: string | null): string {
+    if (!link) return '';
+    // If it's already a full URL, return it
+    if (link.startsWith('http')) return link;
+
+    const parts = link.split('/');
+    const filename = parts[parts.length - 1];
+    return `${environment.supabaseStorageUrl}service-uploads/${filename}`;
   }
 }

@@ -75,7 +75,7 @@
             style="min-height: 14rem"
           >
             <img
-              [src]="service()!.image_link || '/assets/default-service.png'"
+              [src]="getServiceImageUrl(service()!.image_link)"
               alt="Service banner"
               class="w-full h-56 object-cover object-center transition-all duration-300"
               loading="lazy"
