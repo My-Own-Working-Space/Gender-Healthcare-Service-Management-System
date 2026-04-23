@@ -51,19 +51,20 @@ export class BlogsPageComponent implements OnInit {
   selectedTag: string | null = null;
 
   ngOnInit() {
-    // Initialize translated categories
-    const allText = this.translate.instant('COMMON.ALL');
-    this.categories = [
-      allText,
-      this.translate.instant('BLOG.CATEGORIES.COMMUNITY'),
-      this.translate.instant('BLOG.CATEGORIES.MENTAL_HEALTH'),
-      this.translate.instant('BLOG.CATEGORIES.GENDER_STORIES'),
-      this.translate.instant('BLOG.CATEGORIES.LEGAL'),
-      this.translate.instant('BLOG.CATEGORIES.EDUCATION'),
-    ];
-    this.selectedCategory = allText;
-
-    this.loadBlogs();
+    // Use stream to handle translation changes and initial load
+    this.translate.get(['COMMON.ALL', 'BLOG.CATEGORIES.COMMUNITY', 'BLOG.CATEGORIES.MENTAL_HEALTH', 'BLOG.CATEGORIES.GENDER_STORIES', 'BLOG.CATEGORIES.LEGAL', 'BLOG.CATEGORIES.EDUCATION']).subscribe((translations) => {
+      const allText = translations['COMMON.ALL'];
+      this.categories = [
+        allText,
+        translations['BLOG.CATEGORIES.COMMUNITY'],
+        translations['BLOG.CATEGORIES.MENTAL_HEALTH'],
+        translations['BLOG.CATEGORIES.GENDER_STORIES'],
+        translations['BLOG.CATEGORIES.LEGAL'],
+        translations['BLOG.CATEGORIES.EDUCATION'],
+      ];
+      this.selectedCategory = allText;
+      this.loadBlogs();
+    });
   }
 
   loadBlogs() {
