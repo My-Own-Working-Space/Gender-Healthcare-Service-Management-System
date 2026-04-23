@@ -24,7 +24,7 @@
           {{ doctorName }}
         </h2>
         <div
-          class="flex flex-wrap gap-4 text-base text-[#e2e2e2] font-medium items-center"
+          class="flex flex-wrap gap-4 text-base text-white/90 font-medium items-center"
         >
           <div class="flex items-center gap-2">
             <svg
@@ -383,10 +383,7 @@
         >
           <div class="relative w-full h-48 bg-gray-50 overflow-hidden">
             <img
-              [src]="
-                blog.image_link ||
-                'https://via.placeholder.com/600x350?text=No+Image'
-              "
+              [src]="getBlogImageUrl(blog.image_link)"
               class="w-full h-48 object-cover object-center transition-transform duration-300 group-hover:scale-[1.04]"
               alt="Blog thumbnail"
               loading="lazy"

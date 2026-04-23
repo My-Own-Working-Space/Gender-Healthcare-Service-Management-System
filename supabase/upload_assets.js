@@ -14,9 +14,9 @@ if (!SERVICE_ROLE_KEY) {
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
 const doctorImages = [
-  '/home/minhchau/Documents/Gender-Healthcare/apps/product-web/doctor_1.jpg',
-  '/home/minhchau/Documents/Gender-Healthcare/apps/product-web/doctor_2.jpg',
-  '/home/minhchau/Documents/Gender-Healthcare/apps/product-web/doctor_3.jpg'
+  path.join(__dirname, '../apps/product-web/doctor-assets/doctor_1.png'),
+  path.join(__dirname, '../apps/product-web/doctor-assets/doctor_2.png'),
+  path.join(__dirname, '../apps/product-web/doctor-assets/doctor_3.png')
 ];
 
 const serviceImage = '/home/minhchau/.gemini/antigravity/brain/e9038e8a-f6f2-4982-ab55-21ad305e9e86/service_bg_1776852507537.png';

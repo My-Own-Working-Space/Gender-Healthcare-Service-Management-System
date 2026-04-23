@@ -8,6 +8,7 @@ import { NgClass, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core'; // Import TranslateService
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-doctors-page',
@@ -54,14 +55,13 @@ export class DoctorsPageComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Initialize translated filter options
-    const allText = this.translate.instant('COMMON.ALL');
-    this.selectedSpecialty = allText;
-    this.selectedGender = allText;
+    this.selectedSpecialty = 'ALL';
+    this.selectedGender = 'ALL';
     this.genders = [
-      allText,
-      this.translate.instant('COMMON.MALE'),
-      this.translate.instant('COMMON.FEMALE'),
-      this.translate.instant('COMMON.OTHER'),
+      'ALL',
+      'MALE',
+      'FEMALE',
+      'OTHER',
     ];
 
     this.fetchDoctors();
@@ -86,8 +86,7 @@ export class DoctorsPageComponent implements OnInit {
         const uniqueSpecialties = Array.from(
           new Set(data.map((doc) => doc.speciality).filter(Boolean))
         );
-        const allText = this.translate.instant('COMMON.ALL');
-        this.specialties = [allText, ...uniqueSpecialties];
+        this.specialties = ['ALL', ...uniqueSpecialties];
         this.page = 1;
         this.updatePagination();
         this.loading = false;
@@ -107,11 +106,18 @@ export class DoctorsPageComponent implements OnInit {
     this.isDesktop = window.innerWidth >= 768;
   }
 
-  getImageUrl(link: string | null | undefined): string {
+  getImageUrl(link?: string | null): string {
     if (!link) return this.fallbackImage;
-    return link.includes('//doctor')
-      ? link.replace('//doctor', '/doctor')
-      : link;
+    const parts = link.split('/');
+    const filename = parts[parts.length - 1];
+    return `${environment.supabaseStorageUrl}staff-uploads/${filename}`;
+  }
+
+  getBlogImageUrl(link?: string | null): string {
+    if (!link) return 'https://via.placeholder.com/600x350?text=No+Image';
+    const parts = link.split('/');
+    const filename = parts[parts.length - 1];
+    return `${environment.supabaseStorageUrl}blog-uploads/${filename}`;
   }
 
   // FILTER HANDLERS
@@ -138,14 +144,13 @@ export class DoctorsPageComponent implements OnInit {
     let filtered = this.allDoctors;
 
     // Filter by specialty
-    const allText = this.translate.instant('COMMON.ALL');
-    if (this.selectedSpecialty !== allText)
+    if (this.selectedSpecialty && this.selectedSpecialty !== 'ALL')
       filtered = filtered.filter(
         (doc) => doc.speciality === this.selectedSpecialty
       );
 
     // Filter by gender
-    if (this.selectedGender !== allText)
+    if (this.selectedGender && this.selectedGender !== 'ALL')
       filtered = filtered.filter(
         (doc) => doc.staff_members?.gender === this.selectedGender
       );

@@ -3,6 +3,7 @@ import {
   importProvidersFrom,
   provideZoneChangeDetection,
   ErrorHandler,
+  isDevMode,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -18,8 +19,8 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { GlobalErrorHandlerService } from './services/global-error-handler.service';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { provideServiceWorker } from '@angular/service-worker';
 
-// 👇 THÊM
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -51,7 +52,6 @@ export const appConfig: ApplicationConfig = {
       multi: true,
     },
 
-    // 👇 THÊM ĐOẠN NÀY (phải nằm trong providers)
     importProvidersFrom(
       TranslateModule.forRoot({
         defaultLanguage: 'vi',
@@ -62,5 +62,10 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+    
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
 };

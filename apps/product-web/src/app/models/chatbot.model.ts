@@ -38,3 +38,24 @@ export interface ChatRequest {
   query: string;
   user_id?: string;
 }
+
+export interface GroqChatCompletion {
+  id: string;
+  object: string;
+  created: number;
+  model: string;
+  choices: Array<{
+    index: number;
+    message: {
+      role: string;
+      content: string;
+    };
+    logprobs: any;
+    finish_reason: string;
+  }>;
+  usage: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+}

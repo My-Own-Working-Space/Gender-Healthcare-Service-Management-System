@@ -837,4 +837,32 @@ export class PeriodTrackingService {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return Math.max(1, diffDays); // At least 1 day
   }
+
+  /**
+   * Delete period entry from database
+   */
+  deletePeriodEntry(periodId: string): Observable<boolean> {
+    console.log('PERIOD SERVICE - Deleting period entry:', periodId);
+    
+    return new Observable((observer) => {
+      // Direct supabase delete
+      from(this.supabase.from('period_tracking').delete().eq('period_id', periodId))
+        .subscribe({
+          next: ({ error }) => {
+            if (error) {
+              console.error('DATABASE ERROR - Failed to delete period:', error);
+              observer.error(error);
+              return;
+            }
+            
+            console.log('DATABASE SUCCESS - Period entry deleted');
+            // Refresh local signals after delete if any, or just update history
+            this.getPeriodHistory().subscribe();
+            observer.next(true);
+            observer.complete();
+          },
+          error: (err) => observer.error(err)
+        });
+    });
+  }
 }

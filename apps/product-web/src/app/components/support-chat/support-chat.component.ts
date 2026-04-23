@@ -10,6 +10,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Input } from '@angular/core';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
@@ -18,7 +19,9 @@ import {
   ChatResponse,
   DoctorRecommendation,
   N8nWebhookResponse,
+  GroqChatCompletion,
 } from '../../models/chatbot.model';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-support-chat',
@@ -32,6 +35,8 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
   @ViewChild('messageInput') messageInput!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('chatBody') chatBody!: ElementRef<HTMLDivElement>;
 
+  @Input() hideFab = false;
+
   showChatPanel = false;
   message = '';
   isTyping = false;
@@ -40,7 +45,7 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
   sessionId?: string;
   userId?: string;
 
-  currentMsg: ChatMessage | null = null;
+  messages: ChatMessage[] = [];
   showClearBtn = false;
 
   quickReplyText: string = '';
@@ -96,9 +101,9 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private shouldScrollToBottom = false;
+  private readonly SUPPORT_AI_URL =
+    `${environment.apiEndpoint}/ai-chat`;
   private messageIdCounter = 0;
-  private readonly N8N_WEBHOOK_URL =
-    'https://khanhnqse.app.n8n.cloud/webhook/chatbot';
 
   constructor(
     private http: HttpClient,
@@ -110,7 +115,10 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
 
     this.translate.onLangChange.subscribe(() => {
       this.initQuickReplies();
-      this.initializeChat();
+      // Only re-initialize if empty
+      if (this.messages.length === 0) {
+        this.initializeChat();
+      }
     });
   }
 
@@ -134,12 +142,12 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
 
   private initializeChat() {
     this.translate.get('AI_CHAT.WELCOME').subscribe((welcomeMsg) => {
-      this.setCurrentMsg({
+      this.messages = [{
         id: this.generateMessageId(),
         from: 'bot',
         text: welcomeMsg,
         timestamp: new Date(),
-      });
+      }];
       this.showClearBtn = false;
       this.cdr.markForCheck();
     });
@@ -235,18 +243,14 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
         const trimmed = paragraph.trim();
         if (!trimmed) return '';
 
-        if (trimmed.includes('<') || trimmed.includes('</')) {
+        // If it already contains HTML tags (like <ul> or <h3>), return as is
+        if (trimmed.startsWith('<') && trimmed.endsWith('>') && (trimmed.includes('</') || trimmed.includes('/>'))) {
           return trimmed;
         }
 
-        const lines = trimmed.split('\n').filter((line) => line.trim());
-        if (lines.length === 1) {
-          return `<p class="chat-paragraph">${lines[0]}</p>`;
-        } else {
-          return `<div class="chat-multi-line">${lines
-            .map((line) => `<p class="chat-paragraph">${line}</p>`)
-            .join('')}</div>`;
-        }
+        // Convert single newlines to <br> for better readability
+        const withLineBreaks = trimmed.replace(/\n/g, '<br>');
+        return `<p class="chat-paragraph">${withLineBreaks}</p>`;
       })
       .filter((p) => p)
       .join('\n');
@@ -278,9 +282,9 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
     }
   }
 
-  private setCurrentMsg(msg: ChatMessage, showClear: boolean = false): void {
-    this.currentMsg = msg;
-    this.showClearBtn = showClear;
+  private addMessage(msg: ChatMessage, showClear: boolean = false): void {
+    this.messages.push(msg);
+    this.showClearBtn = showClear || this.messages.length > 1;
     this.shouldScrollToBottom = true;
     if (msg.from === 'bot' && !this.showChatPanel) this.unreadCount++;
     this.cdr.markForCheck();
@@ -308,7 +312,7 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
     const userMessage = (messageText || this.message).trim();
     if (!userMessage) return;
 
-    this.setCurrentMsg(
+    this.addMessage(
       {
         id: this.generateMessageId(),
         from: 'user',
@@ -323,71 +327,31 @@ export class SupportChatComponent implements AfterViewChecked, OnDestroy {
     this.startThinkingMessages();
     this.cdr.markForCheck();
 
-    const enhancedQuery = `${userMessage}
-
-Answer like you're a caring friend having a normal conversation. Use simple, everyday language that's easy to understand. Write in flowing sentences and natural paragraphs - no lists, no bullet points, no numbers, no symbols. Just talk to me like a real person would.
-
-IMPORTANT: When recommending doctors, show ONLY 1 doctor (the best match). Include their name, specialty, brief description, their profile image, and profile link.
-
-For the doctor image, use this format: [/doctor1.webp] where the filename matches the doctor.
-For the profile link, use this EXACT format: http://localhost:4200/doctor/{doctor_id} where {doctor_id} is the actual doctor's unique ID. DO NOT show the doctor ID in the text, just include the full URL.
-
-SPECIAL TRIGGERS:
-- If the user asks about booking an appointment, scheduling, or wants to see a doctor, include: [TRIGGER_FORM_FLOW]
-- If the user asks about period tracking, menstrual cycle, or wants to track their period, include: [TRIGGER_PERIOD_TRACKER]
-
-Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproductive health. [/doctor1.webp] You can view her profile at http://localhost:4200/doctor/dr-sarah-johnson-123"`;
-
-    const chatRequest: ChatRequest = {
-      query: enhancedQuery,
-      user_id: this.userId,
+    const chatPayload = {
+      query: userMessage
     };
 
-    console.log('🚀 Sending request to n8n webhook:', {
-      url: this.N8N_WEBHOOK_URL,
-      request: chatRequest,
-      userMessage: userMessage,
-    });
+    console.log('🚀 AI CHAT - Sending message:', userMessage);
+    console.log('🔗 AI CHAT - Endpoint:', this.SUPPORT_AI_URL);
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Accept: 'application/json',
+      'Authorization': `Bearer ${environment.supabaseAnonKey}`,
+      'apikey': environment.supabaseAnonKey
     });
 
     this.http
-      .post<N8nWebhookResponse>(this.N8N_WEBHOOK_URL, chatRequest, { headers })
-      .pipe(takeUntil(this.destroy$), debounceTime(100))
+      .post<GroqChatCompletion>(this.SUPPORT_AI_URL, chatPayload, { headers })
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          console.log('✅ Received response from n8n webhook:', response);
+          console.log('✅ Received response from AI:', response);
 
           this.isTyping = false;
           this.clearThinkingInterval();
 
-          let responseData: any;
-          if (Array.isArray(response) && response.length > 0) {
-            responseData = response[0];
-            console.log('📦 Using first array element:', responseData);
-          } else {
-            responseData = response;
-            console.log('📦 Using direct response:', responseData);
-          }
-
-          let rawResponse = '';
-          if (responseData?.output) {
-            rawResponse = responseData.output;
-            console.log('📝 Using output field:', rawResponse);
-          } else if (responseData?.answer) {
-            rawResponse = responseData.answer;
-            console.log('📝 Using answer field:', rawResponse);
-          } else if (typeof responseData === 'string') {
-            rawResponse = responseData;
-            console.log('📝 Using string response:', rawResponse);
-          } else {
-            rawResponse = 'No response received';
-            console.warn('⚠️ No valid response format found:', responseData);
-          }
-
+          const rawResponse = response.choices[0]?.message?.content || 'No response received';
+          
           const shouldTriggerForm = rawResponse.includes('[TRIGGER_FORM_FLOW]');
           const shouldTriggerPeriodTracker = rawResponse.includes(
             '[TRIGGER_PERIOD_TRACKER]'
@@ -395,11 +359,6 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
           const botText = this.formatAIResponse(rawResponse);
 
           console.log('🎯 Final bot text:', botText);
-          console.log('🔄 Should trigger form:', shouldTriggerForm);
-          console.log(
-            '📅 Should trigger period tracker:',
-            shouldTriggerPeriodTracker
-          );
 
           if (shouldTriggerForm) {
             setTimeout(() => {
@@ -413,7 +372,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
             }, 2000);
           }
 
-          this.setCurrentMsg(
+          this.addMessage(
             {
               id: this.generateMessageId(),
               from: 'bot',
@@ -424,15 +383,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
           );
         },
         error: (error) => {
-          console.error('❌ Error calling n8n webhook:', error);
-          console.error('📊 Error details:', {
-            status: error.status,
-            statusText: error.statusText,
-            message: error.message,
-            url: error.url,
-            error: error.error,
-          });
-
+          console.error('❌ Error calling Groq API:', error);
           this.isTyping = false;
           this.clearThinkingInterval();
           this.isConnected = false;
@@ -455,12 +406,17 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
       key = 'AI_CHAT.CHAT_ERROR.SERVICE_UNAVAILABLE';
     else if (error.status === 404) key = 'AI_CHAT.CHAT_ERROR.NOT_FOUND';
 
+    console.error('❌ AI CHAT ERROR:', error);
+
     this.translate.get(key, { status: error.status }).subscribe((msg) => {
-      this.setCurrentMsg(
+      const errorDetail = error.error?.error || error.message || '';
+      const displayMsg = `${msg}${errorDetail ? ' (' + errorDetail + ')' : ''}`;
+
+      this.addMessage(
         {
           id: this.generateMessageId(),
           from: 'bot',
-          text: msg,
+          text: displayMsg,
           timestamp: new Date(),
         },
         true
@@ -496,7 +452,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
 
     this.showCalendarView();
 
-    this.setCurrentMsg(
+    this.addMessage(
       {
         id: this.generateMessageId(),
         from: 'bot',
@@ -517,7 +473,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
     this.selectedDate = date;
     this.currentAppFlow = 'appointment';
 
-    this.setCurrentMsg(
+    this.addMessage(
       {
         id: this.generateMessageId(),
         from: 'bot',
@@ -553,7 +509,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
       </div>
     `;
 
-    this.setCurrentMsg(
+    this.addMessage(
       {
         id: this.generateMessageId(),
         from: 'bot',
@@ -609,7 +565,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
   }
 
   triggerPatientFormFlow(): void {
-    this.setCurrentMsg(
+    this.addMessage(
       {
         id: this.generateMessageId(),
         from: 'bot',
@@ -627,7 +583,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
   // ========== PERIOD TRACKING METHODS ==========
 
   triggerPeriodTracker(): void {
-    this.setCurrentMsg(
+    this.addMessage(
       {
         id: this.generateMessageId(),
         from: 'bot',
@@ -827,7 +783,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
         </div>
       `;
 
-      this.setCurrentMsg(
+      this.addMessage(
         {
           id: this.generateMessageId(),
           from: 'bot',
@@ -841,7 +797,7 @@ Example: "I recommend Dr. Sarah Johnson, a gynecologist specializing in reproduc
 
   showPeriodLogForm(day: any): void {
     this.selectedPeriodDate = day.dateString;
-    this.setCurrentMsg(
+    this.addMessage(
       {
         id: this.generateMessageId(),
         from: 'bot',

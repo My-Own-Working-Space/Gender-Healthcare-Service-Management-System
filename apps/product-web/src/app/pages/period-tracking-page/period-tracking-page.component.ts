@@ -23,7 +23,6 @@ import {
 } from '../../models/period-tracking.model';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { PeriodCalendarComponent } from '../../components/period-calendar/period-calendar.component';
 
 
 
@@ -36,7 +35,6 @@ import { PeriodCalendarComponent } from '../../components/period-calendar/period
     TranslateModule,
     HeaderComponent,
     FooterComponent,
-    PeriodCalendarComponent,
   ],
   templateUrl: './period-tracking-page.component.html',
   styleUrl: './period-tracking-page.component.css',
@@ -58,7 +56,8 @@ export class PeriodTrackingComponent implements OnInit {
   successPredictions = signal<any>(null);
 
 
-  activeTab = signal<'overview' | 'calendar' | 'insights' | 'history'>(
+
+  activeTab = signal<'overview' | 'insights' | 'history'>(
     'overview'
   );
 
@@ -176,6 +175,7 @@ export class PeriodTrackingComponent implements OnInit {
 
   // =========== LIFECYCLE ===========
   ngOnInit(): void {
+    console.log('🌸 PeriodTrackingComponent initialized with Pink Pastel Theme');
     this.loadPeriodData();
     this.generateCalendar();
   }
@@ -438,8 +438,32 @@ export class PeriodTrackingComponent implements OnInit {
   }
 
   // =========== TAB METHODS ===========
-  switchTab(tab: 'overview' | 'calendar' | 'insights' | 'history'): void {
+  switchTab(tab: 'overview' | 'insights' | 'history'): void {
     this.activeTab.set(tab);
+  }
+
+  changeMonth(offset: number): void {
+    const nextMonth = new Date(this.currentMonth());
+    nextMonth.setMonth(nextMonth.getMonth() + offset);
+    this.currentMonth.set(nextMonth);
+    this.generateCalendar();
+  }
+
+  onDateClick(date: Date): void {
+    // If date is in history, maybe show details. If empty, open log form.
+    this.logForm.start_date = date.toISOString().split('T')[0];
+    this.openLogForm();
+  }
+
+  deletePeriodEntry(id: string): void {
+    if (confirm('Are you sure you want to delete this record?')) {
+      this.periodService.deletePeriodEntry(id).subscribe({
+        next: () => {
+          this.loadPeriodData();
+          this.showSuccessModal.set(true);
+        }
+      });
+    }
   }
 
   // =========== FORM SUBMISSION ===========

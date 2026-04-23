@@ -10,6 +10,7 @@ import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.c
 import { BreadcrumbService } from '../../services/breadcrumb.service';
 import { Subscription } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-doctor-detail',
@@ -83,9 +84,16 @@ export class DoctorDetailComponent implements OnInit, OnDestroy {
 
   getImageUrl(link?: string | null): string {
     if (!link) return this.fallbackImage;
-    return link.includes('//doctor')
-      ? link.replace('//doctor', '/doctor')
-      : link;
+    const parts = link.split('/');
+    const filename = parts[parts.length - 1];
+    return `${environment.supabaseStorageUrl}staff-uploads/${filename}`;
+  }
+
+  getBlogImageUrl(link?: string | null): string {
+    if (!link) return 'https://via.placeholder.com/600x350?text=No+Image';
+    const parts = link.split('/');
+    const filename = parts[parts.length - 1];
+    return `${environment.supabaseStorageUrl}blog-uploads/${filename}`;
   }
 
   get doctorName(): string {
@@ -93,11 +101,7 @@ export class DoctorDetailComponent implements OnInit, OnDestroy {
   }
 
   get doctorAvatar(): string {
-    const link = this.doctor()?.staff_members?.image_link;
-    if (!link) return this.fallbackImage;
-    return link.includes('//doctor')
-      ? link.replace('//doctor', '/doctor')
-      : link;
+    return this.getImageUrl(this.doctor()?.staff_members?.image_link);
   }
 
   get staffLanguages(): string[] {

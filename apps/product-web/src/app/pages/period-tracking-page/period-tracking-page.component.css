@@ -1,635 +1,164 @@
-/* ================== PERIOD TRACKING STYLES ================== */
-
-/* Default text color for period tracking */
-.period-tracking-container {
-  color: #000000;
+/* ================== PERIOD TRACKING STYLES (COFFEE THEME) ================== */
+:root {
+  --coffee-50: #fdfcfb;
+  --coffee-100: #f5f0eb;
+  --coffee-200: #e7d8cc;
+  --coffee-300: #d4bda8;
+  --coffee-400: #bb9b82;
+  --coffee-500: #a67b5b;
+  --coffee-600: #8c6449;
+  --coffee-700: #6f4e37;
+  --coffee-800: #5a402e;
+  --coffee-900: #4b3527;
 }
 
-.text-shadow {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.flo-dashboard {
+  background-color: var(--coffee-100);
+  background-image: radial-gradient(circle at top right, #fdfcfb, transparent);
+  min-height: 100vh;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: var(--coffee-900);
 }
 
-/* ================== BUTTON TEXT COLOR FIXES ================== */
-
-/* Force white text on all gradient buttons */
-button.bg-gradient-to-r,
-button.bg-gradient-to-br,
-button[class*="bg-gradient"],
-.bg-gradient-to-r,
-.bg-gradient-to-br {
-  color: white !important;
+.flo-sidebar {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  padding: 2.5rem 1.5rem;
+  border-right: 1px solid var(--coffee-200);
 }
 
-/* Force white text on specific gradient combinations */
-button[class*="from-pink-500"],
-button[class*="from-pink-600"],
-button[class*="from-purple-500"],
-button[class*="from-purple-600"],
-button[class*="from-green-400"],
-button[class*="from-green-500"],
-button[class*="to-pink-500"],
-button[class*="to-pink-600"],
-button[class*="to-purple-500"],
-button[class*="to-purple-600"],
-button[class*="to-green-400"],
-button[class*="to-green-500"] {
-  color: white !important;
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0.875rem 1.25rem;
+  border-radius: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--coffee-400);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Pink/Purple solid buttons should have white text */
-button.bg-pink-500,
-button.bg-pink-600,
-button.bg-purple-500,
-button.bg-purple-600,
-.bg-pink-500,
-.bg-pink-600,
-.bg-purple-500,
-.bg-purple-600 {
-  color: white !important;
-}
-
-/* Success/Green buttons should have white text */
-button.bg-green-400,
-button.bg-green-500,
-button.bg-green-600,
-.bg-green-400,
-.bg-green-500,
-.bg-green-600 {
-  color: white !important;
-}
-
-/* Override for text-white class - highest specificity */
-.text-white,
-button.text-white,
-*.text-white {
-  color: white !important;
-}
-
-/* SVG icons inside buttons should inherit white color */
-button[class*="bg-gradient"] svg,
-button[class*="from-pink"] svg,
-button[class*="from-purple"] svg,
-button[class*="from-green"] svg,
-button.text-white svg {
-  color: inherit;
-}
-
-/* ================== ADDITIONAL TEXT COLOR FIXES ================== */
-
-/* Ensure dark backgrounds have white text */
-.bg-black,
-.bg-gray-800,
-.bg-gray-900 {
-  color: white !important;
-}
-
-/* Loading spinner text */
-.animate-spin {
-  color: inherit !important;
-}
-
-/* Modal overlay text should be white when on dark background */
-.bg-black.bg-opacity-50 {
-  color: white !important;
-}
-
-/* Ensure proper contrast for all text elements */
-.text-gray-800,
-.text-gray-900 {
-  color: #1f2937 !important;
-}
-
-.text-gray-700 {
-  color: #374151 !important;
-}
-
-.text-gray-600 {
-  color: #4b5563 !important;
-}
-
-.text-gray-500 {
-  color: #6b7280 !important;
-}
-
-/* ================== CUSTOM DATE PICKER STYLES ================== */
-
-/* Custom Date Picker Styles */
-input[type="date"] {
-  position: relative;
+.nav-item.active {
   background: white;
-  color: #374151;
+  color: var(--coffee-900);
+  box-shadow: 0 10px 25px -5px rgba(111, 78, 55, 0.1);
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-  position: absolute;
-  right: 12px;
-  color: #9CA3AF;
+.nav-item:hover:not(.active) {
+  background: rgba(111, 78, 55, 0.05);
+  color: var(--coffee-700);
+}
+
+.flo-card {
+  background: white;
+  border-radius: 2rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(111, 78, 55, 0.05);
+  box-shadow: 0 4px 15px rgba(111, 78, 55, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.flo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -10px rgba(111, 78, 55, 0.08);
+}
+
+.action-card {
+  flex: 1;
+  text-align: center;
+  padding: 2rem 1.5rem;
   cursor: pointer;
-  font-size: 16px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-  color: #EC4899;
+.action-card.active {
+  border: 2px solid var(--coffee-300);
+  background: linear-gradient(135deg, white, #fffdfb);
 }
 
-input[type="date"]:focus::-webkit-calendar-picker-indicator {
-  color: #EC4899;
-}
-
-/* Firefox date picker */
-input[type="date"]::-moz-focus-inner {
-  border: 0;
-}
-
-/* Remove default date picker styling in some browsers */
-input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Custom focus states */
-input[type="date"]:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
-}
-
-/* Placeholder-like styling when empty */
-input[type="date"]:invalid {
-  color: #9CA3AF;
-}
-
-input[type="date"]:valid {
-  color: #374151;
-}
-
-/* ================== RESPONSIVE LAYOUT ================== */
-@media (max-width: 1279px) {
-  /* On mobile and tablet, stack columns vertically */
-  .grid-cols-1.xl\\:grid-cols-2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 1280px) {
-  /* On desktop, show two columns */
-  .grid-cols-1.xl\\:grid-cols-2 {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  /* Adjust spacing for larger screens */
-  .space-y-6 > * + * {
-    margin-top: 1.5rem;
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: 640px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .rounded-3xl {
-    border-radius: 1.5rem;
-  }
-
-  .p-8 {
-    padding: 1.5rem;
-  }
-}
-
-/* Calendar Day Hover Effects */
-.calendar-day {
-  transition: all 0.2s ease;
-  cursor: pointer;
+.period-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
   position: relative;
-  min-height: 2.5rem;
-  border: 1px solid transparent;
+  box-shadow: 0 25px 50px -12px rgba(111, 78, 55, 0.25);
+  transition: all 0.5s ease;
 }
 
-.calendar-day:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.period-circle.coffee-theme {
+  background: linear-gradient(135deg, var(--coffee-500), var(--coffee-700));
 }
 
-.calendar-day:focus {
-  outline: none;
-  ring: 2px;
-  ring-color: rgb(244 114 182);
-  ring-opacity: 0.5;
-}
-
-@media (max-width: 640px) {
-  .calendar-day {
-    min-height: 2rem;
-    font-size: 0.75rem;
-  }
-}
-
-/* Period Day Styles */
-.period-day {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
-}
-
-.period-day:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
-}
-
-/* Fertile Day Styles */
-.fertile-day {
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(74, 222, 128, 0.3);
-}
-
-.fertile-day:hover {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-  box-shadow: 0 4px 8px rgba(74, 222, 128, 0.4);
-}
-
-/* Ovulation Day Styles */
-.ovulation-day {
-  background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
-  color: #1f2937;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(250, 204, 21, 0.3);
-  border: 2px solid #f59e0b;
-}
-
-.ovulation-day:hover {
-  background: linear-gradient(135deg, #eab308 0%, #d97706 100%);
-  box-shadow: 0 4px 8px rgba(250, 204, 21, 0.4);
-}
-
-/* Predicted Period Styles */
-.predicted-day {
-  background: linear-gradient(135deg, #f9a8d4 0%, #f472b6 100%);
-  color: #be185d;
-  font-weight: 600;
-  border: 2px dashed #ec4899;
-  box-shadow: 0 2px 4px rgba(249, 168, 212, 0.3);
-}
-
-.predicted-day:hover {
-  background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
-  box-shadow: 0 4px 8px rgba(249, 168, 212, 0.4);
-}
-
-/* Today Highlight */
-.today {
-  box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px rgba(59, 130, 246, 0.2);
-  animation: todayPulse 2s infinite;
-}
-
-@keyframes todayPulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px rgba(59, 130, 246, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 0 2px #3b82f6, 0 0 0 6px rgba(59, 130, 246, 0.3);
-  }
-}
-
-/* Modal Animations */
-.modal-enter {
-  animation: modalEnter 0.3s ease-out;
-}
-
-@keyframes modalEnter {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Stats Card Animations */
-.stats-card {
+.symptom-bar {
+  width: 14px;
+  border-radius: 7px;
+  background: var(--coffee-200);
   transition: all 0.3s ease;
 }
 
-.stats-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+.symptom-bar:hover {
+  background: var(--coffee-500);
+  filter: brightness(1.1);
 }
 
-/* Flow Intensity Colors */
-.flow-light {
-  background-color: #ffb6c1;
+.pink-overlay {
+  background: rgba(111, 78, 55, 0.1);
+  backdrop-filter: blur(8px);
 }
 
-.flow-medium {
-  background-color: #ff69b4;
-}
-
-.flow-heavy {
-  background-color: #dc143c;
-}
-
-/* Symptom Button Styles */
-.symptom-button {
-  transition: all 0.2s ease;
-  transform: scale(1);
-}
-
-.symptom-button:hover {
-  transform: scale(1.05);
-}
-
-.symptom-button.selected {
-  box-shadow: 0 0 0 2px #f472b6, 0 0 0 4px rgba(244, 114, 182, 0.2);
-}
-
-/* Loading Spinner */
-.loading-spinner {
-  animation: spin 1s linear infinite;
-  border-radius: 50%;
-  border: 2px solid #d1d5db;
-  border-top-color: #ec4899;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Gradient Backgrounds */
-.gradient-pink {
-  background: linear-gradient(135deg, #ffeef8 0%, #f3e8ff 100%);
-}
-
-.gradient-purple {
-  background: linear-gradient(135deg, #f3e8ff 0%, #e0e7ff 100%);
-}
-
-/* Calendar Grid Responsive */
-@media (max-width: 640px) {
-  .calendar-grid {
-    gap: 1px;
-  }
-
-  .calendar-day {
-    font-size: 0.75rem;
-    padding: 0.25rem;
-  }
-}
-
-/* Modal Responsive */
-@media (max-width: 640px) {
-  .modal-content {
-    margin: 0 1rem;
-    max-height: 95vh;
-  }
-}
-
-/* Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background-color: #f3f4f6;
-  border-radius: 9999px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #f9a8d4;
-  border-radius: 9999px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #f472b6;
-}
-
-/* Period Tracking Specific Styles */
-.period-calendar {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.period-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.period-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+.flo-search {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  background: white;
+  border: 1px solid var(--coffee-200);
   font-size: 0.875rem;
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #f9fafb;
-  border-radius: 0.5rem;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.flo-search:focus {
+  border-color: var(--coffee-500);
+  box-shadow: 0 0 0 4px rgba(111, 78, 55, 0.05);
 }
 
-.legend-color {
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.25rem;
+/* Background utilities */
+.bg-coffee-500 { background-color: var(--coffee-500); }
+.bg-coffee-600 { background-color: var(--coffee-600); }
+.bg-coffee-50 { background-color: var(--coffee-50); }
+.bg-coffee-100 { background-color: var(--coffee-100); }
+.text-coffee-400 { color: var(--coffee-400); }
+.text-coffee-500 { color: var(--coffee-500); }
+.text-coffee-600 { color: var(--coffee-600); }
+.text-coffee-900 { color: var(--coffee-900); }
+.border-coffee-50 { border-color: rgba(111, 78, 55, 0.1); }
+.border-coffee-400 { border-color: var(--coffee-400); }
+.shadow-coffee-100 { box-shadow: 0 10px 15px -3px rgba(111, 78, 55, 0.1); }
+
+/* Animation Classes */
+.animate-in { animation: fadeIn 0.4s ease-out; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Form Styles */
-.form-input {
+.flo-input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px #ec4899;
-}
-
-.form-textarea {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  resize: none;
-  transition: all 0.2s ease;
-}
-
-.form-textarea:focus {
-  outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px #ec4899;
-}
-
-.form-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.5rem;
-}
-
-/* Button Styles */
-.btn-primary {
-  background-color: #ec4899;
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  background-color: #db2777;
-}
-
-.btn-secondary {
-  background-color: #8b5cf6;
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background-color: #7c3aed;
-}
-
-.btn-outline {
-  border: 2px solid #d1d5db;
-  color: #374151;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
-  background: white;
-  cursor: pointer;
-}
-
-.btn-outline:hover {
-  border-color: #9ca3af;
-  color: #111827;
-}
-
-/* Error Styles */
-.error-message {
-  background-color: #fef2f2;
-  border: 1px solid #fca5a5;
-  color: #b91c1c;
+  border-radius: 1rem;
+  border: 1px solid var(--coffee-200);
   padding: 0.75rem 1rem;
-  border-radius: 0.375rem;
-  margin-bottom: 1rem;
+  outline: none;
+  transition: all 0.2s;
 }
 
-/* Success Styles */
-.success-message {
-  background-color: #f0fdf4;
-  border: 1px solid #86efac;
-  color: #166534;
-  padding: 0.75rem 1rem;
-  border-radius: 0.375rem;
-  margin-bottom: 1rem;
-}
-
-/* Utility Classes */
-.text-shadow {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.backdrop-blur {
-  backdrop-filter: blur(4px);
-}
-
-/* Enhanced gradient backgrounds */
-.gradient-main {
-  background: linear-gradient(135deg, #ffeef8 0%, #f3e8ff 50%, #e0e7ff 100%);
-}
-
-.gradient-card {
-  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
-}
-
-/* Improved shadows */
-.shadow-soft {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.shadow-medium {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-/* Interactive elements */
-.interactive {
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.interactive:hover {
-  transform: translateY(-1px);
-}
-
-.interactive:active {
-  transform: translateY(0);
-}
-
-/* Loading states */
-.skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* Dark Mode Support (if needed) */
-@media (prefers-color-scheme: dark) {
-  .dark-mode {
-    background-color: #111827;
-    color: white;
-  }
-
-  .dark-mode .period-calendar {
-    background-color: #1f2937;
-  }
-
-  .dark-mode .form-input {
-    background-color: #374151;
-    border-color: #4b5563;
-    color: white;
-  }
+.flo-input:focus {
+  border-color: var(--coffee-500);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.05);
 }

@@ -22,14 +22,16 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.css",
               "node_modules/@splidejs/splide/dist/css/splide.min.css",
               "node_modules/primeicons/primeicons.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": "src/ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -45,7 +47,8 @@
                   "maximumError": "100kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,

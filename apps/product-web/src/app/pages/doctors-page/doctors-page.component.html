@@ -54,7 +54,7 @@
           @for (spec of specialties; track spec) {
           <option [value]="spec">
             {{
-              spec === "All"
+              spec === "ALL"
                 ? ("DOCTOR.FILTER.ALL_SPECIALTIES" | translate)
                 : (spec.replaceAll("_", " ") | titlecase)
             }}
@@ -70,7 +70,7 @@
           @for (g of genders; track g) {
           <option [value]="g">
             {{
-              g === "All"
+              g === "ALL"
                 ? ("DOCTOR.FILTER.ALL_GENDERS" | translate)
                 : ("DOCTOR.GENDER." + g | translate)
             }}

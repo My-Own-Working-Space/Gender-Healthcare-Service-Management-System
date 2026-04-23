@@ -52,13 +52,23 @@
 
   <!-- 3. AI Support Chat Button -->
   <div class="action-item">
-    <!-- Headset Icon from Flaticon -->
-    <div class="ripple-effect"></div>
-    <app-support-chat />
+    <button
+      (click)="toggleChat()"
+      class="action-btn ai-chat-btn"
+      [title]="'AI_CHAT.TITLE' | translate"
+    >
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/2706/2706962.png"
+        alt="AI Support"
+        class="action-icon"
+      />
+      <div class="ripple-effect"></div>
+    </button>
+
     <!-- Hover tooltip -->
-    <!-- <div class="tooltip">
+    <div class="tooltip">
       <span class="tooltip-text">{{ "AI_CHAT.TITLE" | translate }}</span>
-    </div> -->
+    </div>
   </div>
 
   <!-- 4. Back to Top Button -->
@@ -93,77 +103,5 @@
   }
 </div>
 
-<!-- AI Chat Interface (when opened) -->
-@if (isChatOpen()) {
-<div class="chat-overlay" (click)="closeChat()">
-  <div class="chat-container" (click)="$event.stopPropagation()">
-    <div class="chat-header">
-      <div class="chat-title">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/2706/2706962.png"
-          alt="AI Support"
-          class="w-5 h-5 mr-2 headset-icon-header"
-        />
-        {{ "AI_CHAT.TITLE" | translate }}
-      </div>
-      <button (click)="closeChat()" class="close-btn">
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <div class="chat-content">
-      <div class="chat-message bot-message">
-        <div class="message-content">
-          {{ "AI_CHAT.WELCOME" | translate }}
-        </div>
-      </div>
-
-      <div class="quick-replies">
-        <div class="quick-reply-title">
-          {{ "AI_CHAT.QUICK_REPLIES_TITLE" | translate }}
-        </div>
-        @for (reply of getQuickReplies(); track reply; let i = $index) {
-        <button class="quick-reply-btn" (click)="sendQuickReply(reply)">
-          {{ reply }}
-        </button>
-        }
-      </div>
-    </div>
-
-    <div class="chat-input">
-      <input
-        type="text"
-        [placeholder]="'AI_CHAT.PLACEHOLDER' | translate"
-        class="message-input"
-      />
-      <button class="send-btn">
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-          />
-        </svg>
-      </button>
-    </div>
-  </div>
-</div>
-}
+<!-- REAL Support Chat Component (Hidden FAB) -->
+<app-support-chat [hideFab]="true" />

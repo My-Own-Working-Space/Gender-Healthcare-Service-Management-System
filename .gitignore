@@ -115,12 +115,20 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Ignore Angular environments
-/apps/management-web/src/app/environments/environment.ts
-/apps/product-web/src/app/environments/environment.ts
+# Ignore Angular environments (Keep secrets out of Git)
+/apps/*/src/app/environments/environment.ts
+/apps/*/src/app/environments/environment.prod.ts
 
-# Ignore Supabase .env
+# Ignore Supabase .env and temporary files
 /product-gdhc/supabase/functions/.env
+supabase/.temp/
+api_test.json
+
+# Test reports
+test-results/
+playwright-report/
+apps/*/test-results/
+apps/*/playwright-report/
 
 # Build outputs
 build/

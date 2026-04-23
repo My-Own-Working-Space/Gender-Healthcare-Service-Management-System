@@ -87,16 +87,16 @@
 
       <!-- Chat Messages -->
       <div class="chat-conversation">
-        @if (currentMsg) {
+        @for (msg of messages; track msg.id) {
         <div
           class="message-container mb-4"
-          [ngClass]="currentMsg.from + '-message'"
+          [ngClass]="msg.from + '-message'"
         >
           <div
             class="message flex gap-3 items-start"
-            [ngClass]="'message-' + currentMsg.from"
+            [ngClass]="'message-' + msg.from"
           >
-            @if (currentMsg.from === 'bot') {
+            @if (msg.from === 'bot') {
             <div class="message-avatar">
               <div
                 class="bot-avatar w-8 h-8 rounded-full bg-gradient-to-br from-blue-100/20 to-blue-200/10 border-2 border-blue-400/20 shadow-sm flex items-center justify-center transition-all duration-200 hover:scale-105"
@@ -115,13 +115,13 @@
             <div class="message-content flex-1">
               <div
                 class="message-text bg-white border border-gray-200 rounded-2xl px-4 py-3 text-sm leading-relaxed text-gray-700 shadow-sm transition-all duration-200 hover:shadow-md max-w-xs"
-                [innerHTML]="currentMsg.text"
+                [innerHTML]="msg.text"
               ></div>
               <div class="message-meta mt-1 flex items-center gap-2">
                 <span class="message-time text-xs text-gray-500 font-medium">{{
-                  formatTime(currentMsg.timestamp)
+                  formatTime(msg.timestamp)
                 }}</span>
-                @if (currentMsg.from === 'bot') {
+                @if (msg.from === 'bot') {
                 <span class="message-sender text-xs text-gray-500"
                   >AI Assistant</span
                 >
@@ -289,47 +289,49 @@
   </div>
 
   <!-- Floating Action Button -->
-  <div
-    class="tgdd-fab"
-    (click)="toggleChat()"
-    [class.active]="showChatPanel"
-    [class.has-unread]="unreadCount > 0"
-  >
-    <div class="fab-content">
-      @if (!showChatPanel) {
-      <div class="fab-icon">
-        <!-- AI Service Icon by fulmal from Flaticon -->
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/17062/17062495.png"
-          alt="AI Service"
-          width="24"
-          height="24"
-          class="fab-support-icon"
-          style="filter: brightness(0) invert(1)"
-        />
+  @if (!hideFab) {
+    <div
+      class="tgdd-fab"
+      (click)="toggleChat()"
+      [class.active]="showChatPanel"
+      [class.has-unread]="unreadCount > 0"
+    >
+      <div class="fab-content">
+        @if (!showChatPanel) {
+        <div class="fab-icon">
+          <!-- AI Service Icon by fulmal from Flaticon -->
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/17062/17062495.png"
+            alt="AI Service"
+            width="24"
+            height="24"
+            class="fab-support-icon"
+            style="filter: brightness(0) invert(1)"
+          />
+        </div>
+        } @if (showChatPanel) {
+        <div class="fab-close">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>
+        }
       </div>
-      } @if (showChatPanel) {
-      <div class="fab-close">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+      @if (unreadCount > 0 && !showChatPanel) {
+      <div class="unread-badge">
+        {{ unreadCount > 9 ? "9+" : unreadCount }}
       </div>
       }
     </div>
-    @if (unreadCount > 0 && !showChatPanel) {
-    <div class="unread-badge">
-      {{ unreadCount > 9 ? "9+" : unreadCount }}
-    </div>
-    }
-  </div>
+  }
 </div>
 
 <!-- Patient Form Modal -->

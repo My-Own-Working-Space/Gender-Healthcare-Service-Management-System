@@ -21,13 +21,13 @@ import {
   template: `
     <div class="period-calendar">
       <!-- Calendar Header -->
-      <div class="flex items-center justify-between mb-6 px-2">
+      <div class="flex items-center justify-between mb-8 px-4">
         <button
           (click)="previousMonth()"
-          class="p-3 rounded-full hover:bg-pink-100 transition-all duration-200 hover:scale-110 shadow-sm"
+          class="p-3 rounded-2xl bg-pink-50 text-pink-500 hover:bg-pink-100 transition-all duration-300 hover:scale-105 shadow-sm border border-pink-100"
         >
           <svg
-            class="w-5 h-5 text-pink-600"
+            class="w-5 h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -41,16 +41,16 @@ import {
           </svg>
         </button>
 
-        <h3 class="text-xl font-bold text-gray-800 tracking-wide">
+        <h3 class="text-xl font-black text-gray-800 tracking-tight">
           {{ monthYearDisplay() }}
         </h3>
 
         <button
           (click)="nextMonth()"
-          class="p-3 rounded-full hover:bg-pink-100 transition-all duration-200 hover:scale-110 shadow-sm"
+          class="p-3 rounded-2xl bg-pink-50 text-pink-500 hover:bg-pink-100 transition-all duration-300 hover:scale-105 shadow-sm border border-pink-100"
         >
           <svg
-            class="w-5 h-5 text-pink-600"
+            class="w-5 h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -192,26 +192,20 @@ import {
       .calendar-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
-        background: white;
-        padding: 12px;
-        border-radius: 16px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e5e7eb;
+        gap: 6px;
+        background: transparent;
+        padding: 4px;
       }
 
       /* Day Headers */
       .day-header {
         text-align: center;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: #374151;
-        padding: 8px 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: #F472B6;
+        padding: 8px 0;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        background: #f9fafb;
-        border-radius: 8px;
-        margin-bottom: 4px;
+        letter-spacing: 1px;
       }
 
       /* Calendar Day Cells */
@@ -306,116 +300,118 @@ import {
 
       /* Day Type Styles */
       .period-day {
-        background: linear-gradient(135deg, #fecaca 0%, #f87171 100%);
-        color: #7f1d1d;
-        border-color: #dc2626;
+        background: linear-gradient(135deg, #F9A8D4 0%, #F472B6 100%) !important;
+        color: white !important;
+        border-color: #F472B6 !important;
+        box-shadow: 0 4px 10px rgba(244, 114, 182, 0.3) !important;
       }
 
       .ovulation-day {
-        background: linear-gradient(135deg, #fde68a 0%, #f59e0b 100%);
-        color: #78350f;
-        border-color: #f59e0b;
+        background: linear-gradient(135deg, #FDE68A 0%, #FBBF24 100%) !important;
+        color: #92400E !important;
+        border-color: #FBBF24 !important;
+        box-shadow: 0 4px 10px rgba(251, 191, 36, 0.3) !important;
       }
 
       .fertile-day {
-        background: linear-gradient(135deg, #a7f3d0 0%, #34d399 100%);
-        color: #064e3b;
-        border-color: #059669;
+        background: linear-gradient(135deg, #A7F3D0 0%, #6EE7B7 100%) !important;
+        color: #064E3B !important;
+        border-color: #34D399 !important;
       }
 
       .predicted-day {
-        background: linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%);
-        color: #831843;
-        border-color: #ec4899;
-        border-style: dashed;
+        background: white !important;
+        color: #F472B6 !important;
+        border: 2px dashed #F472B6 !important;
       }
 
       .other-month {
-        background: #fafafa;
-        color: #9ca3af;
-        opacity: 0.4;
+        background: transparent !important;
+        color: #FBCFE8 !important;
+        opacity: 0.5;
       }
 
       .normal-day {
         background: white;
-        color: #ffffffff;
-        border-color: #f3f4f6;
+        color: #4B5563;
+        border-color: #FFF1F2;
       }
 
       .normal-day:hover {
-        background: #fafafa;
-        border-color: #e5e7eb;
+        background: #FFF1F2;
+        border-color: #FBCFE8;
+        transform: scale(1.05);
       }
 
       /* Legend Styles */
       .legend-container {
         background: white;
-        border-radius: 12px;
-        padding: 16px;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid #FFF1F2;
+        box-shadow: 0 4px 15px rgba(251, 207, 232, 0.1);
+        margin-top: 20px;
       }
 
       .legend-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #475569;
-        margin-bottom: 12px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: #F472B6;
+        margin-bottom: 16px;
         text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
 
       .legend-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 8px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
       }
 
       .legend-item {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 8px;
-        padding: 8px;
-        border-radius: 8px;
-        background: #fafafa;
-        border: 1px solid #f3f4f6;
+        gap: 6px;
+        text-align: center;
       }
 
       .legend-color {
-        width: 16px;
-        height: 16px;
-        border-radius: 4px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
         flex-shrink: 0;
       }
 
       .period-color {
-        background: linear-gradient(135deg, #fecaca 0%, #f87171 100%);
-        border: 1px solid #dc2626;
+        background: #F472B6;
+        box-shadow: 0 2px 5px rgba(244, 114, 182, 0.4);
       }
 
       .ovulation-color {
-        background: linear-gradient(135deg, #fde68a 0%, #f59e0b 100%);
-        border: 1px solid #f59e0b;
+        background: #FBBF24;
+        box-shadow: 0 2px 5px rgba(251, 191, 36, 0.4);
       }
 
       .fertile-color {
-        background: linear-gradient(135deg, #a7f3d0 0%, #34d399 100%);
-        border: 1px solid #059669;
+        background: #34D399;
       }
 
       .predicted-color {
-        background: linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%);
-        border: 1px dashed #ec4899;
+        background: white;
+        border: 1.5px dashed #F472B6;
       }
 
       .today-color {
-        background: #3b82f6;
-        border: 1px solid #2563eb;
+        background: white;
+        border: 3px solid #3b82f6;
       }
 
       .legend-text {
-        font-size: 0.75rem;
-        font-weight: 500;
-        color: #64748b;
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: #9CA3AF;
       }
 
       /* Enhanced Animations */

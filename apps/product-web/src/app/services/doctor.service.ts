@@ -33,8 +33,14 @@ export class DoctorService {
       params = params.set('specialty', specialty);
     if (gender && gender !== 'All') params = params.set('gender', gender);
 
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'apikey': environment.supabaseKey
+    });
+
     return this.http.get<Doctor[]>(`${environment.apiEndpoint}/fetch-doctor`, {
       params,
+      headers
     });
   }
 

@@ -65,13 +65,19 @@
           class="block"
           style="text-decoration: none"
         >
+          @if (sv.image_link) {
           <img
-            [src]="
-              sv.image_link || 'https://placehold.co/400x200?text=No+Image'
-            "
+            [src]="sv.image_link"
             class="w-full h-36 object-cover rounded-lg mb-4"
             alt="{{ sv.name }}"
           />
+          } @else {
+          <div
+            class="w-full h-36 rounded-lg mb-4 flex items-center justify-center bg-gradient-to-br from-[#222e5c] to-[#47B1E2] text-white shadow-inner"
+          >
+            <i class="pi pi-heart-fill text-4xl opacity-50"></i>
+          </div>
+          }
           <div class="flex-1">
             <div class="flex items-center gap-2 mb-2">
               @if (sv.service_categories.category_name) {
