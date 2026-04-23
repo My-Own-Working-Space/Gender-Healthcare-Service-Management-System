@@ -48,10 +48,6 @@ export class PaymentResultComponent implements OnInit {
       try {
         this.appointmentPaymentData = JSON.parse(storedData);
         this.isAppointmentPayment = true;
-        console.log(
-          '🏥 Detected appointment payment:',
-          this.appointmentPaymentData
-        );
       } catch (error) {
         console.error('❌ Error parsing appointment payment data:', error);
       }
@@ -143,11 +139,6 @@ export class PaymentResultComponent implements OnInit {
       this.isLoading = false;
       return;
     }
-
-    console.log(
-      '📝 Creating appointment with data:',
-      this.appointmentPaymentData.appointment_data
-    );
 
     // Create appointment request from the stored data
     const appointmentRequest = {

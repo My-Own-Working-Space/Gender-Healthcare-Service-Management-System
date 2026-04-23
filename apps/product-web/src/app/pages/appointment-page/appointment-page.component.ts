@@ -286,8 +286,6 @@ export class AppointmentPageComponent implements OnInit {
     this.formSubmitted = false;
     this.errorMessage = null;
     this.saveBookingState();
-
-    console.log('✅ Next step complete - current step:', this.currentStep);
   }
 
   goToPrevStep() {
@@ -609,17 +607,6 @@ export class AppointmentPageComponent implements OnInit {
   }
 
   onContinueSlot() {
-    console.log('🚀 Proceeding to payment step');
-    console.log('📋 Current booking state:', {
-      slotId: this.booking.preferred_slot_id,
-      doctorId: this.booking.doctor_id,
-      serviceId: this.booking.service_id,
-      fullName: this.booking.fullName,
-      phone: this.booking.phone,
-      selectedDate: this.selectedDate,
-      preferredTime: this.booking.preferred_time,
-    });
-
     this.formSubmitted = true;
 
     if (!this.booking.preferred_slot_id) {
@@ -677,10 +664,7 @@ export class AppointmentPageComponent implements OnInit {
       appointment_time: this.booking.preferred_time,
     };
 
-    console.log('📝 Appointment payment data created:', appointmentPaymentData);
-
     // Save appointment payment data to sessionStorage
-    console.log('💾 Saving appointment payment data to sessionStorage');
     sessionStorage.setItem(
       'appointmentPaymentData',
       JSON.stringify(appointmentPaymentData)

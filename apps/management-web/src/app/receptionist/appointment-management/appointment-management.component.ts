@@ -245,15 +245,20 @@ export class AppointmentManagementComponent implements OnInit {
 
   generateAppointments(patients: Patient[]): Appointment[] {
     const appointments: Appointment[] = [];
+    const getRandomInt = (max: number) => {
+      const array = new Uint32Array(1);
+      window.crypto.getRandomValues(array);
+      return array[0] % max;
+    };
 
     patients.forEach((patient, index) => {
       // Generate 1-3 appointments per patient
-      const appointmentCount = Math.floor(Math.random() * 3) + 1;
+      const appointmentCount = getRandomInt(3) + 1;
 
       for (let i = 0; i < appointmentCount; i++) {
         const appointmentDate = new Date();
         appointmentDate.setDate(
-          appointmentDate.getDate() + Math.floor(Math.random() * 30) - 15
+          appointmentDate.getDate() + getRandomInt(30) - 15
         );
 
         appointments.push({
@@ -262,9 +267,9 @@ export class AppointmentManagementComponent implements OnInit {
           patient_name: patient.full_name,
           patient_email: patient.email || '',
           patient_phone: patient.phone || patient.phone_number || '',
-          doctor_id: `DOC-${Math.floor(Math.random() * 3) + 1}`,
+          doctor_id: `DOC-${getRandomInt(3) + 1}`,
           doctor_name: ['Dr. Smith', 'Dr. Johnson', 'Dr. Brown'][
-            Math.floor(Math.random() * 3)
+            getRandomInt(3)
           ],
           appointment_date: appointmentDate.toISOString().split('T')[0],
           appointment_time: [
@@ -274,10 +279,10 @@ export class AppointmentManagementComponent implements OnInit {
             '14:00',
             '15:00',
             '16:00',
-          ][Math.floor(Math.random() * 6)],
+          ][getRandomInt(6)],
           visit_type: this.getRandomVisitType(),
           appointment_status: this.getRandomStatus(),
-          notes: Math.random() > 0.5 ? 'Regular checkup appointment' : '',
+          notes: getRandomInt(100) > 50 ? 'Regular checkup appointment' : '',
           created_at: patient.created_at || new Date().toISOString(),
           updated_at: patient.updated_at || new Date().toISOString(),
         });
@@ -292,13 +297,18 @@ export class AppointmentManagementComponent implements OnInit {
   }
 
   getRandomVisitType(): VisitType {
+    const getRandomInt = (max: number) => {
+      const array = new Uint32Array(1);
+      window.crypto.getRandomValues(array);
+      return array[0] % max;
+    };
     const types: VisitType[] = [
       VisitType.CONSULTATION,
       VisitType.FOLLOW_UP,
       VisitType.EMERGENCY,
       VisitType.ROUTINE,
     ];
-    return types[Math.floor(Math.random() * types.length)];
+    return types[getRandomInt(types.length)];
   }
 
   getRandomStatus():
@@ -306,13 +316,18 @@ export class AppointmentManagementComponent implements OnInit {
     | 'in_progress'
     | 'completed'
     | 'cancelled' {
+    const getRandomInt = (max: number) => {
+      const array = new Uint32Array(1);
+      window.crypto.getRandomValues(array);
+      return array[0] % max;
+    };
     const statuses: (
       | 'pending'
       | 'in_progress'
       | 'completed'
       | 'cancelled'
     )[] = ['pending', 'in_progress', 'completed', 'cancelled'];
-    return statuses[Math.floor(Math.random() * statuses.length)];
+    return statuses[getRandomInt(statuses.length)];
   }
 
   async calculateStats() {

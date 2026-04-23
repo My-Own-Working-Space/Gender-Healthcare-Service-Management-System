@@ -85,11 +85,7 @@ export class ForgotPasswordPageComponent {
 
   // ==================== PHONE INPUT ====================
   onPhoneInput(phone: string): void {
-    console.log('📱 FORGOT PASSWORD COMPONENT - Phone input changed');
-    console.log('📱 New phone value:', phone);
-
     const isValid = this.forgotPasswordService.isValidPhoneNumber(phone);
-    console.log('✅ Phone validation result:', isValid);
 
     this.forgotPasswordState.update((state) => ({
       ...state,
@@ -113,19 +109,10 @@ export class ForgotPasswordPageComponent {
     const state = this.forgotPasswordState();
     const phone = state.phoneVerification.phone;
 
-    console.log('📱 FORGOT PASSWORD COMPONENT - SEND OTP REQUEST STARTED');
-    console.log('📱 Phone from state:', phone);
-    console.log(
-      '✅ Phone validation status:',
-      state.phoneVerification.isPhoneValid
-    );
-
     if (!state.phoneVerification.isPhoneValid) {
-      console.log('❌ Phone validation failed, aborting OTP send');
       return;
     }
 
-    console.log('🔄 Updating state to sending OTP...');
     this.forgotPasswordState.update((state) => ({
       ...state,
       phoneVerification: {
@@ -135,12 +122,8 @@ export class ForgotPasswordPageComponent {
       },
     }));
 
-    console.log('🔄 Calling forgot password service requestPasswordReset...');
     this.forgotPasswordService.requestPasswordReset(phone).subscribe({
       next: (response: ForgotPasswordResponse) => {
-        console.log('✅ FORGOT PASSWORD COMPONENT - OTP sent successfully');
-        console.log('📦 Send OTP response:', response);
-
         this.forgotPasswordState.update((state) => ({
           ...state,
           phoneVerification: {
@@ -153,13 +136,9 @@ export class ForgotPasswordPageComponent {
           currentStep: 'otp',
         }));
 
-        console.log('⏰ Starting resend timer...');
         this.startResendTimer();
       },
       error: (error) => {
-        console.log('❌ FORGOT PASSWORD COMPONENT - Failed to send OTP');
-        console.log('📦 Send OTP error:', error);
-
         let errorMessage = 'Failed to send verification code';
         if (error.status === 404) {
           errorMessage =
@@ -182,14 +161,8 @@ export class ForgotPasswordPageComponent {
 
   // ==================== OTP INPUT ====================
   onOTPInput(otp: string): void {
-    console.log('🔢 FORGOT PASSWORD COMPONENT - OTP input changed');
-    console.log('🔢 Original OTP value:', otp);
-
     const cleanOTP = otp.replace(/\D/g, '').substring(0, 6);
-    console.log('🔢 Cleaned OTP:', cleanOTP);
-
     const isValid = this.forgotPasswordService.isValidOTP(cleanOTP);
-    console.log('✅ OTP validation result:', isValid);
 
     this.forgotPasswordState.update((state) => ({
       ...state,
@@ -207,9 +180,6 @@ export class ForgotPasswordPageComponent {
     const state = this.forgotPasswordState();
     const otp = state.phoneVerification.otpCode;
 
-    console.log('🔢 FORGOT PASSWORD COMPONENT - VERIFY OTP STARTED');
-    console.log('🔢 OTP to verify:', otp);
-
     if (!state.phoneVerification.isOTPSent) return;
 
     if (!this.forgotPasswordService.isValidOTP(otp)) {
@@ -222,8 +192,6 @@ export class ForgotPasswordPageComponent {
       }));
       return;
     }
-
-    console.log('🔄 Validating OTP format and moving to password step...');
 
     this.forgotPasswordState.update((state) => ({
       ...state,
@@ -362,28 +330,14 @@ export class ForgotPasswordPageComponent {
   resetPassword(): void {
     const state = this.forgotPasswordState();
 
-    console.log('🎯 FORGOT PASSWORD COMPONENT - RESET PASSWORD STARTED');
-    console.log('📊 Current state:', state);
-    console.log(
-      '✅ OTP verified status:',
-      state.phoneVerification.isOTPVerified
-    );
-    console.log(
-      '✅ Password validation status:',
-      this.passwordValidation?.overall?.canSubmit
-    );
-
     if (!state.phoneVerification.isOTPVerified) {
-      console.log('❌ OTP not verified, aborting password reset');
       return;
     }
 
     if (!this.passwordValidation?.overall?.canSubmit) {
-      console.log('❌ Password validation failed, aborting password reset');
       return;
     }
 
-    console.log('🔄 Setting submitting state...');
     this.forgotPasswordState.update((state) => ({
       ...state,
       isSubmitting: true,
@@ -394,36 +348,21 @@ export class ForgotPasswordPageComponent {
     const newPassword = state.formData.newPassword;
     const otp = state.phoneVerification.otpCode;
 
-    console.log('📱 Final reset password data:');
-    console.log('  - Phone:', phone);
-    console.log('  - New password length:', newPassword.length);
-    console.log('  - OTP:', otp);
-
-    console.log('🔄 Calling forgot password service resetPassword...');
     this.forgotPasswordService
       .resetPassword(phone, otp, newPassword)
       .subscribe({
         next: (response: ResetPasswordResponse) => {
-          console.log(
-            '✅ FORGOT PASSWORD COMPONENT - Password reset successful'
-          );
-          console.log('📦 Reset password response:', response);
-
           this.forgotPasswordState.update((state) => ({
             ...state,
             isSubmitting: false,
             currentStep: 'complete',
           }));
 
-          console.log('🏠 Scheduling navigation to login page...');
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 3000);
         },
         error: (error) => {
-          console.log('❌ FORGOT PASSWORD COMPONENT - Password reset failed');
-          console.log('📦 Reset password error:', error);
-
           let errorMessage = 'Password reset failed. Please try again.';
 
           if (error.status === 401) {

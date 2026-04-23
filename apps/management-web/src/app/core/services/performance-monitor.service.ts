@@ -165,7 +165,9 @@ export class PerformanceMonitorService implements OnDestroy {
   }
 
   private generateSessionId(): string {
-    return 'session_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+    const array = new Uint32Array(2);
+    window.crypto.getRandomValues(array);
+    return 'session_' + array[0].toString(36) + array[1].toString(36) + Date.now().toString(36);
   }
 
   private cleanup(): void {

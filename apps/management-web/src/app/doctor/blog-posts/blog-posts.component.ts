@@ -477,10 +477,6 @@ export class BlogPostsComponent extends BaseComponent implements OnInit {
       this.saving = true;
       this.error = null; // Clear any previous errors
 
-      console.log('💾 Saving blog post...');
-      console.log('👤 Doctor ID:', this.doctorId);
-      console.log('📝 Form data:', this.blogForm.value);
-
       const formData = this.blogForm.value;
 
       if (this.isEditMode && this.currentPost) {
@@ -502,13 +498,8 @@ export class BlogPostsComponent extends BaseComponent implements OnInit {
         await this.supabaseService.updateBlogPost(updateData);
         console.log('✅ Updated post in Supabase');
       } else {
-        console.log('➕ Creating new post with edge function');
-
         // For new posts, convert HTML to plain text for consistent storage
         const plainTextContent = this.convertHtmlToPlainText(formData.blog_content || '');
-
-        console.log('📝 Original HTML content:', formData.blog_content);
-        console.log('📝 Converted plain text:', plainTextContent);
 
         // Prepare data for edge function
         const blogData = {
@@ -521,21 +512,6 @@ export class BlogPostsComponent extends BaseComponent implements OnInit {
           image_file: this.selectedFile || undefined,
           published_at: formData.blog_status === 'published' ? new Date().toISOString() : undefined
         };
-
-        console.log('📝 Prepared blog data for edge function:', {
-          ...blogData,
-          image_file: blogData.image_file ? `File: ${blogData.image_file.name}` : 'No file'
-        });
-
-        console.log('🏷️ Tags processing debug:');
-        console.log('  - currentTags type:', typeof this.currentTags);
-        console.log('  - currentTags isArray:', Array.isArray(this.currentTags));
-        console.log('  - currentTags array:', this.currentTags);
-        console.log('  - currentTags length:', this.currentTags.length);
-        console.log('  - currentTags each type:', this.currentTags.map(tag => typeof tag));
-        console.log('  - blogData.blog_tags:', blogData.blog_tags);
-        console.log('  - blogData.blog_tags type:', typeof blogData.blog_tags);
-        console.log('  - blogData.blog_tags isArray:', Array.isArray(blogData.blog_tags));
 
         // Use edge function service for creating new posts
         const result = await this.blogEdgeFunctionService.createBlogPost(blogData);
@@ -1096,7 +1072,8 @@ export class BlogPostsComponent extends BaseComponent implements OnInit {
 
   // Utility methods
   generateExcerpt(content: string): string {
-    const plainText = content.replace(/<[^>]*>/g, '');
+    // Robust regex to strip HTML tags safely
+    const plainText = content.replace(/<(?:.|\n)*?>/gm, '');
     return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
   }
 

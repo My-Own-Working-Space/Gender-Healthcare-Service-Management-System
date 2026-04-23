@@ -58,9 +58,6 @@ export class LoginComponent {
           if (this.form().controls['phone'] && loadedFormData.phone) {
             this.form().controls['phone'].setValue(loadedFormData.phone);
           }
-          if (this.form().controls['password'] && loadedFormData.password) {
-            this.form().controls['password'].setValue(loadedFormData.password);
-          }
           if (this.form().controls['rememberMe'] && loadedFormData.rememberMe) {
             this.form().controls['rememberMe'].setValue(
               loadedFormData.rememberMe
@@ -178,7 +175,6 @@ export class LoginComponent {
                   'Remember-login-form',
                   JSON.stringify({
                     phone,
-                    password,
                     rememberMe: true,
                   })
                 );
